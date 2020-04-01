@@ -1,9 +1,11 @@
-**__pycache__/
+**/__pycache__/
 /bin/
 /include/
 /lib/
 /lib64/
 /share/
+/lib64/
+
 .env
 pyenv.cfg
 
