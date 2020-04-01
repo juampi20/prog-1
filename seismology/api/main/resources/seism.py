@@ -22,7 +22,7 @@ class VerifiedSeism(Resource):
 #Resource Verified Seisms
 class VerifiedSeisms(Resource):
     #Get resources
-    def get(self, id):
+    def get(self):
         return VERIFIED_SEISMS
 
 class UnverifiedSeism(Resource):
@@ -50,5 +50,5 @@ class UnverifiedSeism(Resource):
 
 class UnverifiedSeisms(Resource):
     #Get resources
-    def get(self, id):
+    def get(self):
         return UNVERIFIED_SEISMS
