@@ -4,7 +4,7 @@ include/
 lib/
 lib64/
 share/
-lib64/
+lib64
 .env
-pyenv.cfg
+pyvenv.cfg
 
