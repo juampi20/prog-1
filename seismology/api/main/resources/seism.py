@@ -21,7 +21,7 @@ class VerifiedSeism(Resource):
 
 #Resource Verified Seisms
 class VerifiedSeisms(Resource):
-    #Get resources
+    #Get resources list
     def get(self):
         return VERIFIED_SEISMS
 
@@ -49,6 +49,6 @@ class UnverifiedSeism(Resource):
         return 'Seism not found', 404
 
 class UnverifiedSeisms(Resource):
-    #Get resources
+    #Get resources list
     def get(self):
         return UNVERIFIED_SEISMS
