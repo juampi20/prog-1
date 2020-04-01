@@ -5,7 +5,6 @@
 /lib64/
 /share/
 /lib64/
-
 .env
 pyenv.cfg
 
