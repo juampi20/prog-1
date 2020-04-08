@@ -1,6 +1,8 @@
 from flask_restful import Resource
 from flask import request
 
+# TODO: Realizar los cambios para DB
+
 VERIFIED_SEISMS = {
     1: {'datatime': '25/11/2019', 'magnitude': '3.3'},
     2: {'datatime': '10/12/2019', 'magnitude': '1.6'},

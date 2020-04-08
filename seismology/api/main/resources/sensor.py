@@ -1,6 +1,8 @@
 from flask_restful import Resource
 from flask import request
 
+# TODO: Realizar los cambios para DB
+
 SENSORS = {
     1: {'name': 'Sensor01', 'status': 'activaded'},
     2: {'name': 'Sensor02', 'status': 'disabled'},

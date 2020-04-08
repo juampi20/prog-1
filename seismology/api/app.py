@@ -1,6 +1,8 @@
 from main import create_app
 import os
 
+# TODO: Realizar los cambios para DB
+
 app = create_app()
 app.app_context().push()
 
