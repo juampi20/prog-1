@@ -1,56 +1,59 @@
 from flask_restful import Resource
-from flask import request
-
-# TODO: Realizar los cambios para DB
-
-VERIFIED_SEISMS = {
-    1: {'datatime': '25/11/2019', 'magnitude': '3.3'},
-    2: {'datatime': '10/12/2019', 'magnitude': '1.6'},
-}
-
-UNVERIFIED_SEISMS = {
-    1: {'datetime': '08/02/2020', 'magnitude': '2.5'},
-    2: {'datatime': '12/03/2020', 'magnitude': '5.0'},
-}
+from flask import request, jsonify
+from .. import db
+from main.models import SeismModel
 
 #Resource Verified Seism
 class VerifiedSeism(Resource):
     #Get resource
     def get(self, id):
-        if int(id) in VERIFIED_SEISMS:
-            return VERIFIED_SEISMS[int(id)]
-        return 'Seism not found', 404
+        seism = db.session.query(SeismModel).get_or_404(id)
+        if seism.verified:
+            return seism.to_json()
+        else:
+            return "Denied Access", 403
 
 #Resource Verified Seisms
 class VerifiedSeisms(Resource):
     #Get resources list
     def get(self):
-        return VERIFIED_SEISMS
+        seisms = db.session.query(SeismModel).filter(SeismModel.verified==True).all()
+        return jsonify({"Verified-seisms": [seism.to_json() for seism in seisms]})
 
 class UnverifiedSeism(Resource):
     #Get resource
     def get(self, id):
-        if int(id) in UNVERIFIED_SEISMS:
-            return UNVERIFIED_SEISMS[int(id)]
-        return 'Seism not found', 404
+        seism = db.session.query(SeisModel).get_or_404(id)
+        if not seism.verified:
+            return seism.to_json()
+        else:
+            return "Denied Access", 403
 
     #Modify resource
     def put(self, id):
-        if int(id) in UNVERIFIED_SEISMS:
-            seism = UNVERIFIED_SEISMS[int(id)]
-            data = request.get_json()
-            seism.update(data)
-            return seism, 201
-        return 'Seism not found', 404
+        seism = db.session.query(SeismModel).get_or_404(id)
+        data = request.get_json().items()
+        if not seism.verified:
+            for key, value in data:
+                setattr(seism, key, value)
+            db.session.add(seism)
+            db.session.commit()
+            return seism.to_json(), 201
+        else:
+            return "Denied Access", 403
 
     #Delete resource
     def delete(self, id):
-        if int(id) in UNVERIFIED_SEISMS:
-            del UNVERIFIED_SEISMS[int(id)]
-            return 'Successful deletion', 204
-        return 'Seism not found', 404
+        seism = db.session.query(SeismModel).get_or_404(id)
+        if not seism.verified:
+            db.session.delete(seism)
+            db.session.commit()
+            return "Unverified seism delete", 204
+        else:
+            return "Denied Access", 403
 
 class UnverifiedSeisms(Resource):
     #Get resources list
     def get(self):
-        return UNVERIFIED_SEISMS
+        seisms =  db.session.query(SeismModel).filter(SeismModel.verified == False).all()
+        return jsonify({"Unverified-seisms": [seism.to_json() for seism in seisms]})
