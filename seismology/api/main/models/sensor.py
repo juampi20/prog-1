@@ -7,7 +7,9 @@ class Sensor(db.Model):
     port = db.Column(db.Integer, nullable=False)
     status = db.Column(db.Boolean, nullable=False)
     active = db.Column(db.Boolean, nullable=False)
-    userid = db.Column(db.Integer, nullable=False)
+    userid = db.Column(db.Integer, db.ForeignKey("user.id"))
+    user = db.relationship("User", back_populates="sensors")
+    
 
     def __repr__(self):
         return "<Sensor: %r %r %r %r %r %r>" % (self.id, self.name, self.ip, self.port, self.status, self.active)
@@ -21,7 +23,7 @@ class Sensor(db.Model):
             "port": self.port,
             "status": self.status,
             "active": self.active,
-            "userid": self.userid,
+            "user": self.user.to_json()
         }
         return sensor_json
 
