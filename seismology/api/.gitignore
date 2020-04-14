@@ -7,4 +7,3 @@ share/
 lib64
 .env
 pyvenv.cfg
-seismology.db
