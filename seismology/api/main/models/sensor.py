@@ -7,9 +7,12 @@ class Sensor(db.Model):
     port = db.Column(db.Integer, nullable=False)
     status = db.Column(db.Boolean, nullable=False)
     active = db.Column(db.Boolean, nullable=False)
-    userid = db.Column(db.Integer, db.ForeignKey("user.id"))
+    #ForeignKey
+    userId = db.Column(db.Integer, db.ForeignKey("user.id"))
+    #Relation with user
     user = db.relationship("User", back_populates="sensors")
-    
+    #Relation with seism
+    seisms = db.relationship("Seism", back_populates="sensor", cascade="all, delete-orphan")
 
     def __repr__(self):
         return "<Sensor: %r %r %r %r %r %r>" % (self.id, self.name, self.ip, self.port, self.status, self.active)
@@ -36,12 +39,12 @@ class Sensor(db.Model):
         port = sensor_json.get("port")
         status = sensor_json.get("status")
         active = sensor_json.get("active")
-        userid = sensor_json.get("userid")
+        userId = sensor_json.get("userId")
         return Sensor(id=id,
                     name=name,
                     ip=ip,
                     port=port,
                     status=status,
                     active=active,
-                    userid=userid,
+                    userId=userId,
                  )

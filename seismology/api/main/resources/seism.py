@@ -23,7 +23,7 @@ class VerifiedSeisms(Resource):
 class UnverifiedSeism(Resource):
     #Get resource
     def get(self, id):
-        seism = db.session.query(SeisModel).get_or_404(id)
+        seism = db.session.query(SeismModel).get_or_404(id)
         if not seism.verified:
             return seism.to_json()
         else:
