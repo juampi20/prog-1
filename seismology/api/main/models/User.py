@@ -14,9 +14,7 @@ class User(db.Model):
     def to_json(self):
         user_json = {
             "id": self.id,
-            "email": str(self.email),
-            "password": str(self.password),
-            "admin": self.admin,
+            "email": str(self.email)
         }
         return user_json
 

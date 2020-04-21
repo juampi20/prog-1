@@ -17,15 +17,22 @@ class Sensor(Resource):
         for key, value in data:
             setattr(sensor, key, value)
         db.session.add(sensor)
-        db.session.commit()
-        return sensor.to_json(), 201
+        try:
+            db.session.commit()
+            return sensor.to_json(), 201
+        except Exception as error:
+            return str(error), 400
 
     #Delete resource
     def delete(self, id):
         sensor = db.session.query(SensorModel).get_or_404(id)
         db.session.delete(sensor)
-        db.session.commit()
-        return "", 204
+        try:
+            db.session.commit()
+            return "Sensor delete succesfully", 204
+        except Exception as error:
+            db.session.rollback()
+            return str(error), 400
 
 #Resource Sensors
 class Sensors(Resource):
@@ -53,5 +60,8 @@ class Sensors(Resource):
     def post(self):
         sensor = SensorModel.from_json(request.get_json())
         db.session.add(sensor)
-        db.session.commit()
-        return sensor.to_json(), 201
+        try:
+            db.session.commit()
+            return sensor.to_json(), 201
+        except Exception as error:
+            return str(error), 400

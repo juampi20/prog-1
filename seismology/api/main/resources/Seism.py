@@ -24,29 +24,43 @@ class VerifiedSeisms(Resource):
         filters = request.get_json().items()
         seisms =  db.session.query(SeismModel).filter(SeismModel.verified == True)
         for key, value in filters:
+            if key == "datetime":
+                seisms = seisms.filter(SeismModel._dt == value)
             if key == "sensorId":
                 seisms = seisms.filter(SeismModel.sensorId == value)
+            if key == "latitude":
+                seisms = seisms.filter(SeismModel.latitude == value)
+            if key == "longitude":
+                seisms = seisms.filter(SeismModel.longitude == value)
+            if key == "depth":
+                seisms = seisms.filter(SeismModel.depth == value)
             if key == "magnitude":
                 seisms = seisms.filter(SeismModel.magnitude == value)
-            if key == "id":
-                seisms = seisms.filter(SeismModel.id == value)
         seisms.all()
         return jsonify({"Unverified-seisms": [seism.to_json() for seism in seisms]})
 
     #Insert resource
     def post(self):
-        value_sensor = {
-        "datetime": time.strftime(r"%Y-%m-%d %H:%M:%S", time.localtime()),
-        "depth": randint(5,250) ,
-        "magnitude": round(uniform(2.0,5.5), 1),
-        "latitude": uniform(-180,180),
-        "longitude": uniform(-90, 90),
-        "verified": True
-        }
-        seism = SeismModel.from_json(value_sensor)
-        db.session.add(seism)
-        db.session.commit()
-        return seism.to_json(), 201
+        sensors = db.session.query(SensorModel).all()
+        sensorsId = []
+        for sensor in sensors:
+            sensorsId.append(sensor.id)
+        if sensorsId:
+            value_sensor = {
+            'datetime': time.strftime(r"%Y-%m-%d %H:%M:%S", time.localtime()),
+            'depth': randint(5,250) ,
+            'magnitude': round(uniform(2.0,5.5), 1),
+            'latitude': uniform(-180,180),
+            'longitude': uniform(-90, 90),
+            'verified': True,
+            'sensorId': sensorsId[randint(0, len(sensorsId) - 1)]
+            }
+            seism = SeismModel.from_json(value_sensor)
+            db.session.add(seism)
+            db.session.commit()
+            return seism.to_json(), 201
+        else:
+            return "No sensors found, can't create seism", 400
 
 class UnverifiedSeism(Resource):
     #Get resource
@@ -65,8 +79,11 @@ class UnverifiedSeism(Resource):
             for key, value in data:
                 setattr(seism, key, value)
             db.session.add(seism)
-            db.session.commit()
-            return seism.to_json(), 201
+            try:
+                db.session.commit()
+                return seism.to_json(), 201
+            except Exception as error:
+                return str(error), 400
         else:
             return "Denied Access", 403
 
@@ -87,32 +104,40 @@ class UnverifiedSeisms(Resource):
         filters = request.get_json().items()
         seisms =  db.session.query(SeismModel).filter(SeismModel.verified == False)
         for key, value in filters:
+            if key == "datetime":
+                seisms = seisms.filter(SeismModel._dt == value)
             if key == "sensorId":
                 seisms = seisms.filter(SeismModel.sensorId == value)
+            if key == "latitude":
+                seisms = seisms.filter(SeismModel.latitude == value)
+            if key == "longitude":
+                seisms = seisms.filter(SeismModel.longitude == value)
+            if key == "depth":
+                seisms = seisms.filter(SeismModel.depth == value)
             if key == "magnitude":
                 seisms = seisms.filter(SeismModel.magnitude == value)
-            if key == "id":
-                seisms = seisms.filter(SeismModel.id == value)
         seisms.all()
         return jsonify({"Unverified-seisms": [seism.to_json() for seism in seisms]})
 
     #Insert resource
     def post(self):
-        #sensors = db.session.query(SensorModel).all()
-        #sensorlist = []
-        #for sensor in sensors:
-        #    sensorlist.append(sensor.id)
-        value_sensor = {
-        "datetime": time.strftime(r"%Y-%m-%d %H:%M:%S", time.localtime()),
-        "depth": randint(5,250) ,
-        "magnitude": round(uniform(2.0,5.5), 1),
-        "latitude": uniform(-180,180),
-        "longitude": uniform(-90, 90),
-        "verified": False,
-        "sensorId": randint(1,2)
-        #"sensorId": sensorlist[randint(0,len(sensorlist) - 1)]
-        }
-        seism = SeismModel.from_json(value_sensor)
-        db.session.add(seism)
-        db.session.commit()
-        return seism.to_json(), 201
+        sensors = db.session.query(SensorModel).all()
+        sensorlist = []
+        for sensor in sensors:
+            sensorlist.append(sensor.id)
+        if sensorlist:
+            value_sensor = {
+            "datetime": time.strftime(r"%Y-%m-%d %H:%M:%S", time.localtime()),
+            "depth": randint(5,250) ,
+            "magnitude": round(uniform(2.0,5.5), 1),
+            "latitude": uniform(-180,180),
+            "longitude": uniform(-90, 90),
+            "verified": False,
+            "sensorId": sensorlist[randint(0,len(sensorlist) - 1)]
+            }
+            seism = SeismModel.from_json(value_sensor)
+            db.session.add(seism)
+            db.session.commit()
+            return seism.to_json(), 201
+        else:
+            return "Sensors not found, can't create seism", 400
