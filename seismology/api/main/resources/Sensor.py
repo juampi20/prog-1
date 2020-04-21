@@ -31,8 +31,23 @@ class Sensor(Resource):
 class Sensors(Resource):
     #Get resources list
     def get(self):
-        sensors = db.session.query(SensorModel).all()
-        return jsonify({"sensors": [sensor.to_json() for sensor in sensors] })
+        filters = request.get_json().items()
+        sensors = db.session.query(SensorModel)
+        for key, value in filters:
+            if key == "userId":
+                sensors = sensors.filter(SensorModel.userId == value)
+            if key == "name":
+                sensors = sensors.filter(SensorModel.name == value)
+            if key == "ip":
+                sensors = sensors.filter(SensorModel.ip == value)
+            if key == "port":
+                sensors = sensors.filter(SensorModel.port == value)
+            if key == "active":
+                sensors = sensors.filter(SensorModel.active == value)
+            if key == "status":
+                sensors = sensors.filter(SensorModel.status == value)
+        sensors.all()
+        return jsonify({"Sensors": [sensor.to_json() for sensor in sensors]})
 
     #Insert resource
     def post(self):

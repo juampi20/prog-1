@@ -1,4 +1,5 @@
 from .. import db
+from main.models.User import User
 
 class Sensor(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -8,14 +9,14 @@ class Sensor(db.Model):
     status = db.Column(db.Boolean, nullable=False)
     active = db.Column(db.Boolean, nullable=False)
     #ForeignKey
-    userId = db.Column(db.Integer, db.ForeignKey("user.id"))
+    userId = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=True)
     #Relation with user
-    user = db.relationship("User", back_populates="sensors")
+    user = db.relationship("User", back_populates="sensors", uselist=False, single_parent=True)
     #Relation with seism
-    seisms = db.relationship("Seism", back_populates="sensor", cascade="all, delete-orphan")
+    seisms = db.relationship("Seism", back_populates="sensor", passive_deletes="all")
 
     def __repr__(self):
-        return "<Sensor: %r %r %r %r %r %r>" % (self.id, self.name, self.ip, self.port, self.status, self.active)
+        return "<Sensor: %r %r %r %r %r %r>" %(self.id, self.name, self.ip, self.port, self.status, self.active)
 
     #Convert object to json
     def to_json(self):
