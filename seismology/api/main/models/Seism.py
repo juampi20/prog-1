@@ -33,7 +33,6 @@ class Seism(db.Model):
         }
         return seism_json
 
-    @staticmethod
     #Convert json to object
     def from_json(seism_json):
         id = seism_json.get("id")

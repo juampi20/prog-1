@@ -20,7 +20,6 @@ class User(db.Model):
         }
         return user_json
 
-    @staticmethod
     #Convert json to object
     def from_json(user_json):
         id = user_json.get("id")

@@ -1,5 +1,5 @@
 from .. import db
-from main.models.User import User
+from . import User
 
 class Sensor(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -31,7 +31,6 @@ class Sensor(db.Model):
         }
         return sensor_json
 
-    @staticmethod
     #Convert json to object
     def from_json(sensor_json):
         id = sensor_json.get("id")

@@ -98,10 +98,10 @@ class UnverifiedSeisms(Resource):
 
     #Insert resource
     def post(self):
-        sensors = db.session.query(SensorModel).all()
-        sensorlist = []
-        for sensor in sensors:
-            sensorlist.append(sensor.id)
+        #sensors = db.session.query(SensorModel).all()
+        #sensorlist = []
+        #for sensor in sensors:
+        #    sensorlist.append(sensor.id)
         value_sensor = {
         "datetime": time.strftime(r"%Y-%m-%d %H:%M:%S", time.localtime()),
         "depth": randint(5,250) ,
@@ -109,7 +109,8 @@ class UnverifiedSeisms(Resource):
         "latitude": uniform(-180,180),
         "longitude": uniform(-90, 90),
         "verified": False,
-        "sensorId": sensorlist[randint(0,len(sensorlist) - 1)]
+        "sensorId": randint(1,2)
+        #"sensorId": sensorlist[randint(0,len(sensorlist) - 1)]
         }
         seism = SeismModel.from_json(value_sensor)
         db.session.add(seism)
