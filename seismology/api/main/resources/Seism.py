@@ -57,7 +57,7 @@ class VerifiedSeisms(Resource):
                 per_page = value
 
         seisms = seisms.paginate(page, per_page, True, 10000)
-        return jsonify({"Unverified-seisms": [seism.to_json() for seism in seisms.items]})
+        return jsonify({"Verified-seisms": [seism.to_json() for seism in seisms.items]})
 
     #Insert resource
     def post(self):
