@@ -38,30 +38,60 @@ class Sensor(Resource):
 class Sensors(Resource):
     #Get resources list
     def get(self):
+        page = 1
+        per_page = 50
         filters = request.get_json().items()
         sensors = db.session.query(SensorModel)
+
         for key, value in filters:
+            #Filtros
+            #Filtro pot userId
+            if key == "userId[lte]":
+                sensors = sensors.filter(SensorModel.userId <= value)
+            if key == "userId[gte]":
+                sensors = sensors.filter(SensorModel.userId >= value)
             if key == "userId":
                 sensors = sensors.filter(SensorModel.userId == value)
-            if key == "name":
-                sensors = sensors.filter(SensorModel.name == value)
-            if key == "ip":
-                sensors = sensors.filter(SensorModel.ip == value)
-            if key == "port":
-                sensors = sensors.filter(SensorModel.port == value)
+            #Filtro por active
             if key == "active":
                 sensors = sensors.filter(SensorModel.active == value)
+            #Filtro por status
             if key == "status":
                 sensors = sensors.filter(SensorModel.status == value)
-        sensors.all()
-        return jsonify({"Sensors": [sensor.to_json() for sensor in sensors]})
+
+            #Ordenamiento
+            if key == "sort_by":
+                #Ordenamiento por name
+                if value == "name":
+                    sensors = sensors.order_by(SensorModel.name)
+                if value == "name.desc":
+                    sensors = sensors.order_by(SensorModel.name.desc())
+                #Ordenamiento por status
+                if value == "status":
+                    sensors = sensors.order_by(SensorModel.status)
+                if value == "status.desc":
+                    sensors = sensors.order_by(SensorModel.status.desc())
+                #Ordenamiento por active
+                if value == "active":
+                    sensors = sensors.order_by(SensorModel.active)
+                if value == "active.desc":
+                    sensors = sensors.order_by(SensorModel.active.desc())
+            
+            #Paginacion
+            if key == "page":
+                page = value
+            if key == "per_page":
+                per_page = value
+
+        sensors = sensors.paginate(page, per_page, True, 100)
+        return jsonify({"sensors": [sensor.to_json() for sensor in sensors.items]})
 
     #Insert resource
     def post(self):
         sensor = SensorModel.from_json(request.get_json())
-        db.session.add(sensor)
         try:
+            db.session.add(sensor)
             db.session.commit()
-            return sensor.to_json(), 201
         except Exception as error:
             return str(error), 400
+        return sensor.to_json(), 201
