@@ -9,23 +9,23 @@ class User(db.Model):
     admin = db.Column(db.Boolean, nullable=False)
     sensors = db.relationship("Sensor", back_populates="user")
 
-    #@property funcionaria como la funcion get, para obtener el valor del atributo.
+    # @property funcionaria como la funcion get, para obtener el valor del atributo.
     @property
     def plain_password(self):
         #Error para que no se pueda leer el atributo.
         raise AttributeError("Password can't be read")
 
-    #Esta funcion sirve para otorgarle un valor a password.
+    # Esta funcion sirve para otorgarle un valor a password.
     @plain_password.setter
     def plain_password(self,password):
-        #La asignacion a password va a llamar la funcion generate_password_hash() para generar una contraseña encriptada.
+        # La asignacion a password va a llamar la funcion generate_password_hash() para generar una contraseña encriptada.
         self.password = generate_password_hash(password)
     
-    #Esta funcion sirve para el login, para validar si la contraseña es correcta.
+    # Esta funcion sirve para el login, para validar si la contraseña es correcta.
     def validate_pass(self, password):
-        #Se llama a la funcion check_password_hash() y va a comparar entre la contraseña de la db y la contraseña puesta por el usuario.
+        # Se llama a la funcion check_password_hash() y va a comparar entre la contraseña de la db y la contraseña puesta por el usuario.
         return check_password_hash(self.password, password)
-    #Nunca se vuelve a acceder a la contraseña en texto plano. Las comparaciones es con contraseñas encriptadas.
+    # Nunca se vuelve a acceder a la contraseña en texto plano. Las comparaciones es con contraseñas encriptadas.
 
     def __repr__(self):
         return "<Users: %r %r %r>" % (self.id, self.email, self.admin)
@@ -46,6 +46,6 @@ class User(db.Model):
         admin = user_json.get("admin")
         return User(id=id,
                 email=email,
-                plain_password=password,                    #Se ejecuta el setter para encriptar la contraseña
+                plain_password=password,  # Se ejecuta el setter para encriptar la contraseña
                 admin=admin,
                 )
