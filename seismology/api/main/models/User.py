@@ -28,7 +28,7 @@ class User(db.Model):
     # Nunca se vuelve a acceder a la contraseña en texto plano. Las comparaciones es con contraseñas encriptadas.
 
     def __repr__(self):
-        return "<Users: %r %r %r>" % (self.id, self.email, self.admin)
+        return "<User: %r >" % (self.email)
 
     #Convert object to json
     def to_json(self):

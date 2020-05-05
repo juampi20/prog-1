@@ -1,8 +1,10 @@
-from flask_restful import Resource
 from flask import request, jsonify
-from .. import db
+from flask_restful import Resource
+from flask_jwt_extended import jwt_required, get_jwt_claims, get_jwt_identity
 from main.models import SeismModel, SensorModel
+from main.auth.decorators import admin_required
 from random import uniform, random, randint
+from .. import db
 import time
 
 
@@ -61,6 +63,7 @@ class VerifiedSeisms(Resource):
 
 class UnverifiedSeism(Resource):
     # Get resource
+    @jwt_required
     def get(self, id):
         seism = db.session.query(SeismModel).get_or_404(id)
         if not seism.verified:
@@ -69,6 +72,7 @@ class UnverifiedSeism(Resource):
             return "Denied Access", 403
 
     # Modify resource
+    @jwt_required
     def put(self, id):
         seism = db.session.query(SeismModel).get_or_404(id)
         data = request.get_json().items()
@@ -85,6 +89,7 @@ class UnverifiedSeism(Resource):
             return "Denied Access", 403
 
     # Delete resource
+    @jwt_required
     def delete(self, id):
         seism = db.session.query(SeismModel).get_or_404(id)
         if not seism.verified:
@@ -96,6 +101,7 @@ class UnverifiedSeism(Resource):
 
 class UnverifiedSeisms(Resource):
     # Get resources list
+    @jwt_required
     def get(self):
         page = 1
         per_page = 10
@@ -126,6 +132,7 @@ class UnverifiedSeisms(Resource):
         return jsonify({"Unverified-seisms": [seism.to_json() for seism in seisms.items]})
 
     # Insert resource
+    @jwt_required
     def post(self):
         sensors = db.session.query(SensorModel).all()
         sensorlist = []
