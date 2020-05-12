@@ -18,7 +18,8 @@ class VerifiedSeism(Resource):
         else:
             return "Denied Access", 403
 
-#Resource Verified Seisms
+
+# Resource Verified Seisms
 class VerifiedSeisms(Resource):
     # Get resources list
     def get(self):
@@ -26,7 +27,7 @@ class VerifiedSeisms(Resource):
         per_page = 1000
         seisms = db.session.query(SeismModel).filter(SeismModel.verified == True)
         filters = request.get_json().items()
-        
+
         for key, value in filters:
             # Filtros
             # Filtros para datetime
@@ -34,11 +35,13 @@ class VerifiedSeisms(Resource):
                 seisms = seisms.filter(SeismModel.datetime == value)
             # Filtros para sensor.name
             if key == "sensor.name":
-                seisms = seisms.join(SeismModel.sensor).filter(SensorModel.name == value)
+                seisms = seisms.join(SeismModel.sensor).filter(
+                    SensorModel.name == value
+                )
             # Filtros para magnitude
             if key == "magnitude":
                 seisms = seisms.filter(SeismModel.magnitude == value)
-            
+
             # Ordenamiento
             if key == "sort_by":
                 # Ordenamiento por datetime
@@ -50,8 +53,10 @@ class VerifiedSeisms(Resource):
                 if value == "sensor.name":
                     seisms = seisms.join(SeismModel.sensor).order_by(SeismModel.name)
                 if value == "sensor.name.desc":
-                    seisms = seisms.join(SeismModel.sensor).order_by(SeismModel.name.desc())
-            
+                    seisms = seisms.join(SeismModel.sensor).order_by(
+                        SeismModel.name.desc()
+                    )
+
             # Paginacion
             if key == "page":
                 page = value
@@ -60,6 +65,7 @@ class VerifiedSeisms(Resource):
 
         seisms = seisms.paginate(page, per_page, True, 10000)
         return jsonify({"Verified-seisms": [seism.to_json() for seism in seisms.items]})
+
 
 class UnverifiedSeism(Resource):
     # Get resource
@@ -99,6 +105,7 @@ class UnverifiedSeism(Resource):
         else:
             return "Denied Access", 403
 
+
 class UnverifiedSeisms(Resource):
     # Get resources list
     @jwt_required
@@ -106,7 +113,7 @@ class UnverifiedSeisms(Resource):
         page = 1
         per_page = 10
         filters = request.get_json().items()
-        seisms =  db.session.query(SeismModel).filter(SeismModel.verified == False)
+        seisms = db.session.query(SeismModel).filter(SeismModel.verified == False)
 
         for key, value in filters:
             # Filtros
@@ -129,7 +136,9 @@ class UnverifiedSeisms(Resource):
                 per_page = value
 
         seisms = seisms.paginate(page, per_page, True, 50)
-        return jsonify({"Unverified-seisms": [seism.to_json() for seism in seisms.items]})
+        return jsonify(
+            {"Unverified-seisms": [seism.to_json() for seism in seisms.items]}
+        )
 
     # Insert resource
     @jwt_required
@@ -140,13 +149,13 @@ class UnverifiedSeisms(Resource):
             sensorlist.append(sensor.id)
         if sensorlist:
             value_sensor = {
-            "datetime": time.strftime(r"%Y-%m-%d %H:%M:%S", time.localtime()),
-            "depth": randint(5,250) ,
-            "magnitude": round(uniform(2.0,5.5), 1),
-            "latitude": uniform(-180,180),
-            "longitude": uniform(-90, 90),
-            "verified": False,
-            "sensorId": sensorlist[randint(0,len(sensorlist) - 1)]
+                "datetime": time.strftime(r"%Y-%m-%d %H:%M:%S", time.localtime()),
+                "depth": randint(5, 250),
+                "magnitude": round(uniform(2.0, 5.5), 1),
+                "latitude": uniform(-180, 180),
+                "longitude": uniform(-90, 90),
+                "verified": False,
+                "sensorId": sensorlist[randint(0, len(sensorlist) - 1)],
             }
             seism = SeismModel.from_json(value_sensor)
             db.session.add(seism)

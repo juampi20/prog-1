@@ -4,15 +4,15 @@ from main.models import UserModel
 from main.auth.decorators import admin_required
 from .. import db
 
-#Resource User
+# Resource User
 class User(Resource):
-    #Get resource
+    # Get resource
     @admin_required
     def get(self, id):
         user = db.session.query(UserModel).get_or_404(id)
         return user.to_json()
 
-    #Modify resource
+    # Modify resource
     @admin_required
     def put(self, id):
         user = db.session.query(UserModel).get_or_404(id)
@@ -22,8 +22,8 @@ class User(Resource):
         db.session.add(user)
         db.session.commit()
         return user.to_json(), 201
-    
-    #Delete resource
+
+    # Delete resource
     @admin_required
     def delete(self, id):
         user = db.session.query(UserModel).get_or_404(id)
@@ -31,19 +31,23 @@ class User(Resource):
         db.session.commit()
         return "User was delete", 204
 
-#Resource Users
+
+# Resource Users
 class Users(Resource):
-    #Get resources list
+    # Get resources list
     @admin_required
     def get(self):
         users = db.session.query(UserModel).all()
         return jsonify({"Users": [user.to_json() for user in users]})
 
-    #Insert resource
+    # Insert resource
     @admin_required
     def post(self):
         user = UserModel.from_json(request.get_json())
-        emailDuplicate = db.session.query(UserModel).filter(UserMode.email == user.email).scalar() is not None
+        emailDuplicate = (
+            db.session.query(UserModel).filter(UserModel.email == user.email).scalar()
+            is not None
+        )
         if emailDuplicate:
             return "Email already in use", 409
         else:

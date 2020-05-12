@@ -11,17 +11,27 @@ db = SQLAlchemy()
 jwt = JWTManager()
 mailsender = Mail()
 
+
 def create_app():
     app = Flask(__name__)
     load_dotenv()
     # Si no existe el archivo de base de datos crearlo (solo válido si se utiliza SQLite)
-    if not os.path.exists(os.getenv("SQLALCHEMY_DATABASE_PATH") + os.getenv("SQLALCHEMY_DATABASE_NAME")):
-        os.mknod(os.getenv("SQLALCHEMY_DATABASE_PATH") + os.getenv("SQLALCHEMY_DATABASE_NAME"))
+    if not os.path.exists(
+        os.getenv("SQLALCHEMY_DATABASE_PATH") + os.getenv("SQLALCHEMY_DATABASE_NAME")
+    ):
+        os.mknod(
+            os.getenv("SQLALCHEMY_DATABASE_PATH")
+            + os.getenv("SQLALCHEMY_DATABASE_NAME")
+        )
 
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     # Url de configuración de base de datos
-    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:////" + os.getenv("SQLALCHEMY_DATABASE_PATH") + os.getenv("SQLALCHEMY_DATABASE_NAME")
-    
+    app.config["SQLALCHEMY_DATABASE_URI"] = (
+        "sqlite:////"
+        + os.getenv("SQLALCHEMY_DATABASE_PATH")
+        + os.getenv("SQLALCHEMY_DATABASE_NAME")
+    )
+
     db.init_app(app)
 
     # Se importa aca porque tiene que utilizar db, ya que antes no esta inicializada.
@@ -33,12 +43,14 @@ def create_app():
 
     # Verifica si la conexion es sqlite
     if "sqlite" in app.config["SQLALCHEMY_DATABASE_URI"]:
+
         def activatePrimaryKeys(conection, conection_record):
             # Ejecuta el comando que activa claves foraneas en sqlite.
             conection.execute("pragma foreign_keys=ON")
 
         with app.app_context():
             from sqlalchemy import event
+
             # Al conectar a la base de datos llamar a la funcion que activa las claves foraneas.
             event.listen(db.engine, "connect", activatePrimaryKeys)
 
@@ -59,7 +71,7 @@ def create_app():
     app.config["MAIL_HOSTNAME"] = os.getenv("MAIL_HOSTNAME")
     app.config["MAIL_SERVER"] = os.getenv("MAIL_SERVER")
     app.config["MAIL_PORT"] = os.getenv("MAIL_SERVER")
-    app.config["MAIL_USE_TLS"]  = os.getenv("MAIL_USE_TLS")
+    app.config["MAIL_USE_TLS"] = os.getenv("MAIL_USE_TLS")
     app.config["MAIL_USERNAME"] = os.getenv("MAIL_USERNAME")
     app.config["MAIL_PASSWORD"] = os.getenv("MAIL_PASSWORD")
     app.config["FLASKY_MAIL_SENDER"] = os.getenv("FLASKY_MAIL_SENDER")
