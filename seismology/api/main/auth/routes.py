@@ -40,30 +40,6 @@ def login():
         return "Incorrect password", 401
 
 
-@auth.route("/register", methods=["POST"])
-def register():
-    user = UserModel.from_json(request.get_json())
-    exists = (
-        db.session.query(UserModel).filter(UserModel.email == user.email).scalar()
-        is not None
-    )
-    if exists:
-        return "Duplicate email", 409
-    else:
-        try:
-            db.session.add(user)
-            sent = sendMail(user.email, "Register", "mail/sensor", user=user)
-            if sent == True:
-                db.session.commit()
-            else:
-                db.session.rollback()
-                return str(sent), 502
-        except Exception as error:
-            db.session.rollback()
-            return str(error), 409
-        return user.to_json(), 201
-
-
 @auth.route("/checksensors", methods=["GET"])
 @admin_required
 def checkStatus():
