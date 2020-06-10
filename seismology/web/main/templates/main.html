@@ -7,38 +7,37 @@
     <title>{{title}}</title>
     {% block head %}
     <!-- CSS only -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
-        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <!-- Style CSS -->
-    <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
-    {% endblock %}
+    <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}"> {% endblock %}
 </head>
 
-<body>
+<body class="d-flex flex-column">
     {% block scripts %}
+    <!-- Font Awesome -->
+    <script src="https://kit.fontawesome.com/ec398cbdc7.js" crossorigin="anonymous"></script>
     <!-- JS, Popper.js, and jQuery -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
-        crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-        crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
-        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
-        crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
     <script>
-        $(function () { $('[data-toggle="tooltip"]').tooltip() })
+        $(function() {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
     </script>
     {% endblock %}
+
+    </br>
 
     {% block menu %}
     <header>
         <nav class="navbar navbar-dark navbar-expand-sm bg-dark sticky-top">
             <!-- Logo -->
-            <a href="#" class="navbar-brand font-weight-bold"><i class="fas fa-database"></i> Seismology</a>
+            <a href="{{url_for('verified_seism.index')}}" class="navbar-brand font-weight-bold"><i
+                    class="fas fa-database"></i> Seismology</a>
             <!-- Items del Navbar -->
             <div class="navbar-nav mr-auto">
-                <a href="#" class="nav-item nav-link">Verified Seisms</a>
+                <a href="{{url_for('verified_seism.index')}}" class="nav-item nav-link">Verified Seisms</a>
                 <a href="#" class="nav-item nav-link">Sensors</a>
                 <a href="#" class="nav-item nav-link">Users</a>
             </div>
@@ -51,15 +50,14 @@
     </header>
     {% endblock %}
 
-    </br></br>
+    </br>
 
-    {% block content %}
-    {% endblock %}
+    {% block content %} {% endblock %}
 
-    </br></br>
+    </br>
 
     {% block footer %}
-    <footer class="footer bg-dark py-3">
+    <footer id="sticky-footer" class="fixed-bottom py-4 bg-dark text-white">
         <div class="container">
             <div class="text-center text-muted">© 2020 Copyright:
                 <a class="text-light" href="#">Seismology</a>
