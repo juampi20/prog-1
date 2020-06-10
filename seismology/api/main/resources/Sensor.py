@@ -7,7 +7,7 @@ from .. import db
 # Resource Sensor
 class Sensor(Resource):
     # Get resource
-    @admin_required
+    # @admin_required
     def get(self, id):
         sensor = db.session.query(SensorModel).get_or_404(id)
         return sensor.to_json()
@@ -27,7 +27,7 @@ class Sensor(Resource):
             return str(error), 400
 
     # Delete resource
-    @admin_required
+    # @admin_required
     def delete(self, id):
         sensor = db.session.query(SensorModel).get_or_404(id)
         db.session.delete(sensor)
@@ -42,7 +42,7 @@ class Sensor(Resource):
 # Resource Sensors
 class Sensors(Resource):
     # Get resources list
-    @admin_required
+    # @admin_required
     def get(self):
         page = 1
         per_page = 50
@@ -93,7 +93,7 @@ class Sensors(Resource):
         return jsonify({"sensors": [sensor.to_json() for sensor in sensors.items]})
 
     # Insert resource
-    @admin_required
+    # @admin_required
     def post(self):
         sensor = SensorModel.from_json(request.get_json())
         try:

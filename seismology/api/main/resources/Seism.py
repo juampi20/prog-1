@@ -25,7 +25,8 @@ class VerifiedSeisms(Resource):
     def get(self):
         page = 1
         per_page = 1000
-        seisms = db.session.query(SeismModel).filter(SeismModel.verified == True)
+        seisms = db.session.query(SeismModel).filter(
+            SeismModel.verified == True)
         filters = request.get_json().items()
 
         for key, value in filters:
@@ -51,11 +52,11 @@ class VerifiedSeisms(Resource):
                     seisms = seisms.order_by(SeismModel.datetime.desc())
                 # Ordenamiento por sensor.name
                 if value == "sensor.name":
-                    seisms = seisms.join(SeismModel.sensor).order_by(SeismModel.name)
+                    seisms = seisms.join(
+                        SeismModel.sensor).order_by(SeismModel.name)
                 if value == "sensor.name.desc":
                     seisms = seisms.join(SeismModel.sensor).order_by(
-                        SeismModel.name.desc()
-                    )
+                        SeismModel.name.desc())
 
             # Paginacion
             if key == "page":
@@ -69,7 +70,7 @@ class VerifiedSeisms(Resource):
 
 class UnverifiedSeism(Resource):
     # Get resource
-    @jwt_required
+    # @jwt_required
     def get(self, id):
         seism = db.session.query(SeismModel).get_or_404(id)
         if not seism.verified:
@@ -78,7 +79,7 @@ class UnverifiedSeism(Resource):
             return "Denied Access", 403
 
     # Modify resource
-    @jwt_required
+    # @jwt_required
     def put(self, id):
         seism = db.session.query(SeismModel).get_or_404(id)
         data = request.get_json().items()
@@ -95,7 +96,7 @@ class UnverifiedSeism(Resource):
             return "Denied Access", 403
 
     # Delete resource
-    @jwt_required
+    # @jwt_required
     def delete(self, id):
         seism = db.session.query(SeismModel).get_or_404(id)
         if not seism.verified:
@@ -108,12 +109,13 @@ class UnverifiedSeism(Resource):
 
 class UnverifiedSeisms(Resource):
     # Get resources list
-    @jwt_required
+    # @jwt_required
     def get(self):
         page = 1
         per_page = 10
         filters = request.get_json().items()
-        seisms = db.session.query(SeismModel).filter(SeismModel.verified == False)
+        seisms = db.session.query(SeismModel).filter(
+            SeismModel.verified == False)
 
         for key, value in filters:
             # Filtros
@@ -141,7 +143,7 @@ class UnverifiedSeisms(Resource):
         )
 
     # Insert resource
-    @jwt_required
+    # @jwt_required
     def post(self):
         sensors = db.session.query(SensorModel).all()
         sensorlist = []

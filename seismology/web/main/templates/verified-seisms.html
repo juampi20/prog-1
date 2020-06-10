@@ -1,0 +1,66 @@
+<!-- Hereda del template main -->
+{% extends "main.html" %}
+
+<!-- Importar el archivo de macros -->
+{% import 'macros.html' as macros %}
+
+<!-- Define el contenido -->
+{% block content %}
+<!-- Contenido -->
+<main>
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <div class="col-md-2 d-none d-md-block"></div>
+      <div class="col-md-8">
+        <h1>Verified Seisms</h1>
+
+        <!-- Tabla -->
+        <div class="table-responsive text-center">
+          <table class="table table-dark table-striped table-hover table-bordered">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Date Time</th>
+                <th scope="col">Depth</th>
+                <th scope="col">Magnitude</th>
+                <th scope="col">Latitude</th>
+                <th scope="col">Longitude</th>
+                <th scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+
+              {% for verified_seism in verified_seisms %}
+              {{ macros.show_verified_seism(verified_seism) }}
+              {% endblock %}
+              
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+      <div class="col-md-2 d-none d-md-block"></div>
+    </div>
+
+    <!-- Pagination -->
+    <nav aria-label="Page navigation example">
+      <ul class="pagination justify-content-center">
+        <li class="page-item">
+          <a class="page-link" href="#" aria-label="Previous">
+            <span aria-hidden="true">&laquo;</span>
+          </a>
+        </li>
+        <li class="page-item"><a class="page-link" href="#">1</a></li>
+        <li class="page-item"><a class="page-link" href="#">2</a></li>
+        <li class="page-item"><a class="page-link" href="#">3</a></li>
+        <li class="page-item">
+          <a class="page-link" href="#" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</main>
+<!-- Fin Contenido -->
+{% endblock %}
