@@ -44,10 +44,8 @@ class Users(Resource):
     # @admin_required
     def post(self):
         user = UserModel.from_json(request.get_json())
-        emailDuplicate = (
-            db.session.query(UserModel).filter(UserModel.email == user.email).scalar()
-            is not None
-        )
+        emailDuplicate = (db.session.query(UserModel).filter(
+            UserModel.email == user.email).scalar() is not None)
         if emailDuplicate:
             return "Email already in use", 409
         else:
