@@ -24,7 +24,7 @@ class User(db.Model):
 
     # Esta funcion sirve para el login, para validar si la contraseña es correcta.
     def validate_pass(self, password):
-        # Se llama a la funcion check_password_hash() y va a comparar entre 
+        # Se llama a la funcion check_password_hash() y va a comparar entre
         # la contraseña de la db y la contraseña puesta por el usuario.
         return check_password_hash(self.password, password)
 
@@ -36,7 +36,7 @@ class User(db.Model):
 
     # Convert object to json
     def to_json(self):
-        user_json = {"id": self.id, "email": str(self.email)}
+        user_json = {"id": self.id, "email": str(self.email), "admin": str(self.admin)}
         return user_json
 
     # Convert json to object

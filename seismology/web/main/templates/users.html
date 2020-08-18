@@ -12,7 +12,7 @@
     <div class='row justify-content-center'>
       <div class='col-md-2 d-none d-md-block'></div>
       <div class='col-md-8'>
-        <h1>Verified Seisms</h1>
+        <h1>Users</h1>
 
         <!-- Tabla -->
         <div class='table-responsive text-center'>
@@ -20,18 +20,14 @@
             <thead>
               <tr>
                 <th scope='col'>#</th>
-                <th scope='col'>Date Time</th>
-                <th scope='col'>Depth</th>
-                <th scope='col'>Magnitude</th>
-                <th scope='col'>Latitude</th>
-                <th scope='col'>Longitude</th>
-                <th scope='col'>Actions</th>
+                <th scope='col'>Email</th>
+                <th scope='col'>Admin</th>
               </tr>
             </thead>
             <tbody>
 
-              {% for verified_seism in verified_seisms %}
-              {{ macros.show_verified_seism(verified_seism) }}
+              {% for user in users %}
+              {{ macros.show_user(user) }}
               {% endfor %}
 
             </tbody>

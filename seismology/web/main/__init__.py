@@ -8,7 +8,8 @@ def create_app():
     Breadcrumbs(app=app)
     load_dotenv()
     app.config['API_URL'] = os.getenv('API_URL')
-    from main.routes import main, verified_seism
+    from main.routes import main, verified_seism, user
     app.register_blueprint(routes.main.main)
     app.register_blueprint(routes.verified_seism.verified_seism)
+    app.register_blueprint(routes.user.user)
     return app
