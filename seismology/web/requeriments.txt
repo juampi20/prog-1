@@ -2,3 +2,5 @@ flask
 Flask-Breadcrumbs
 python-dotenv
 requests
+flask_wtf
+email_validator
