@@ -167,5 +167,5 @@ class UnverifiedSeisms(Resource):
             db.session.add(seism)
             db.session.commit()
         else:
-            return "Sensors not found, can't create seism", 400
+            return "Sensors not found, can not create seism", 400
         return seism.to_json(), 201

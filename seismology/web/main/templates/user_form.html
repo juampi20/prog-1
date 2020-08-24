@@ -1,8 +1,8 @@
 <!-- Hereda del template main -->
-{% extends 'main.html' %} {# Herencia #}
+{% extends "main.html" %} {# Herencia #}
 
 <!-- Importar el archivo de macros -->
-{% import 'macros.html' as macro %}
+{% import "macros.html" as macro %}
 
 <!-- Importar macros de formulario -->
 {% from "form_macros.html" import show_field, show_submit %}
@@ -12,10 +12,10 @@
 <!-- Contenido -->
 <div class="container">
     <div class="row">
-        <div class='col-md-2 d-none d-md-block'></div>
-        <div class='col-md-8'>
+        <div class="col-md-2 d-none d-md-block"></div>
+        <div class="col-md-8">
             <h1>New User</h1>
-            <form method="POST" action="{{ url_for('user.create') }}">
+            <form method="POST" action="{{ url_for("user.create") }}">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
 
                 <div class="form-group">
@@ -42,7 +42,7 @@
                 </div>
             </form>
         </div>
-        <div class='col-md-2 d-none d-md-block'></div>
+        <div class="col-md-2 d-none d-md-block"></div>
     </div>
 </div>
 {% endblock %}

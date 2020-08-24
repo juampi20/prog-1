@@ -14,7 +14,7 @@ class User(db.Model):
     @property
     def plain_password(self):
         # Error para que no se pueda leer el atributo.
-        raise AttributeError("Password can't be read")
+        raise AttributeError("Password can not be read")
 
     # Esta funcion sirve para otorgarle un valor a password.
     @plain_password.setter

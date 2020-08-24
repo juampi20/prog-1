@@ -56,4 +56,4 @@ def checkStatus():
             sendMail(adminList, "Desactivated sensors", "mail/sensor", sensorList=sensors)
         return jsonify({"sensors": [sensor.to_json() for sensor in sensors]})
     else:
-        return "There're no deactivated sensors", 200
+        return "There are not deactivated sensors", 200

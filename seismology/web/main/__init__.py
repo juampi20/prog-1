@@ -7,9 +7,9 @@ from flask_breadcrumbs import Breadcrumbs
 def create_app():
     app = Flask(__name__)
     load_dotenv()
-    app.config['API_URL'] = os.getenv('API_URL')
+    app.config["API_URL"] = os.getenv("API_URL")
     csrf = CSRFProtect(app)
-    app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+    app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
     Breadcrumbs(app=app)
 
     # Registrar los Blueprints

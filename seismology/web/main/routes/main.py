@@ -5,6 +5,6 @@ from . import verified_seism
 main = Blueprint("main", __name__, url_prefix="/")
 
 @main.route("/")
-@register_breadcrumb(main, 'breadcrumbs.', 'Home')
+@register_breadcrumb(main, "breadcrumbs.", "Home")
 def index():
     return redirect(url_for("verified_seism.index"))

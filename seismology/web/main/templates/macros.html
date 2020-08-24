@@ -1,21 +1,21 @@
 {% macro show_verified_seism(verified_seism) %}
 <tr>
-  <th scope='row'>{{verified_seism.id}}</th>
+  <th scope="row">{{verified_seism.id}}</th>
   <td>{{verified_seism.datetime}}</td>
   <td>{{verified_seism.depth}}</td>
   <td>{{verified_seism.magnitude}}</td>
   <td>{{verified_seism.latitude}}</td>
   <td>{{verified_seism.longitude}}</td>
   <td>
-    <div class='btn-group' role='group'>
-      <button type='button' class='btn btn-sm btn-dark' data-toggle='tooltip' title='view'>
-        <a href='{{ url_for('verified_seism.view',id=verified_seism.id) }}'><i class='fas fa-eye'></i></a>
+    <div class="btn-group" role="group">
+      <button type="button" class="btn btn-sm btn-dark" data-toggle="tooltip" title="view">
+        <a href="{{ url_for("verified_seism.view",id=verified_seism.id) }}"><i class="fas fa-eye"></i></a>
       </button>
-      <button type='button' class='btn btn-sm btn-dark' data-toggle='tooltip' title='delete'>
-        <a href='#'><i class='fas fa-trash'></i></a>
+      <button type="button" class="btn btn-sm btn-dark" data-toggle="tooltip" title="delete">
+        <a href="#"><i class="fas fa-trash"></i></a>
       </button>
-      <button type='button' class='btn btn-sm btn-dark' data-toggle='tooltip' title='modify'>
-        <a href='#'><i class='fas fa-edit'></i></a>
+      <button type="button" class="btn btn-sm btn-dark" data-toggle="tooltip" title="modify">
+        <a href="#"><i class="fas fa-edit"></i></a>
       </button>
     </div>
   </td>
@@ -24,7 +24,7 @@
 
 {% macro show_user(user) %}
 <tr>
-  <th scope='row'>{{user.id}}</th>
+  <th scope="row">{{user.id}}</th>
   <td>{{user.email}}</td>
   <td>{{user.admin}}</td>
 </tr>
