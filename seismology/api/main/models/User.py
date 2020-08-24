@@ -1,4 +1,5 @@
 from .. import db
+# from flask import request
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
@@ -36,7 +37,11 @@ class User(db.Model):
 
     # Convert object to json
     def to_json(self):
-        user_json = {"id": self.id, "email": str(self.email), "admin": str(self.admin)}
+        user_json = {
+            "id": self.id,
+            "email": str(self.email),
+            "admin": str(self.admin),
+        }
         return user_json
 
     # Convert json to object
@@ -45,4 +50,9 @@ class User(db.Model):
         email = user_json.get("email")
         password = user_json.get("password")
         admin = user_json.get("admin")
-        return User(id=id, email=email, plain_password=password, admin=admin,)
+        return User(
+            id=id,
+            email=email,
+            plain_password=password,
+            admin=admin,
+        )

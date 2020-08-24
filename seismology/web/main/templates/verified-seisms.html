@@ -2,7 +2,7 @@
 {% extends 'main.html' %}
 
 <!-- Importar el archivo de macros -->
-{% import 'macros.html' as macros %}
+{% import 'macros.html' as macro %}
 
 <!-- Define el contenido -->
 {% block content %}
@@ -31,7 +31,7 @@
             <tbody>
 
               {% for verified_seism in verified_seisms %}
-              {{ macros.show_verified_seism(verified_seism) }}
+              {{ macro.show_verified_seism(verified_seism) }}
               {% endfor %}
 
             </tbody>
