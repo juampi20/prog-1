@@ -13,33 +13,33 @@
     <div class="col-md-2 d-none d-md-block"></div>
     <div class="col-md-8">
       
-        <h2 class="text-uppercase text-center text-white mb-0">{{title}}</h2>
-        <hr class="bg-white mb-5" />
+      <h2 class="text-uppercase text-center text-white mb-0">{{title}}</h2>
+      <hr class="bg-white mb-5" />
 
-        <!-- Tabla -->
-        <div class="table-responsive text-center">
-          <table class="table table-dark table-striped table-hover table-bordered">
-            <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">Date Time</th>
-                <th scope="col">Depth</th>
-                <th scope="col">Magnitude</th>
-                <th scope="col">Latitude</th>
-                <th scope="col">Longitude</th>
-                <th scope="col">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
+      <!-- Tabla -->
+      <div class="table-responsive text-center">
+        <table class="table table-dark table-striped table-hover table-bordered">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Date Time</th>
+              <th scope="col">Depth</th>
+              <th scope="col">Magnitude</th>
+              <th scope="col">Latitude</th>
+              <th scope="col">Longitude</th>
+              <th scope="col">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
 
-              {% for verified_seism in verified_seisms %}
-              {{ macro.show_verified_seism(verified_seism) }}
-              {% endfor %}
+            {% for unverified_seism in unverified_seisms %}
+            {{ macro.show_unverified_seism(unverified_seism) }}
+            {% endfor %}
 
-            </tbody>
-          </table>
-        </div>
-      
+          </tbody>
+        </table>
+      </div>
+
     </div>
     <div class="col-md-2 d-none d-md-block"></div>
   </div>

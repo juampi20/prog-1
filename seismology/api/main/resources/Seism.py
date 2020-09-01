@@ -117,29 +117,33 @@ class UnverifiedSeisms(Resource):
     def get(self):
         page = 1
         per_page = 10
-        filters = request.get_json().items()
         seisms = db.session.query(SeismModel).filter(
             SeismModel.verified == False)
 
-        for key, value in filters:
-            # Filtros
-            # Filtros por seismId
-            if key == "sensorId":
-                seisms = seisms.filter(SeismModel.sensorId == value)
+        try:
+            filters = request.get_json().items()
 
-            # Ordenamiento
-            if key == "sort_by":
-                # Ordenamiento por datetime
-                if value == "datetime":
-                    seisms = seisms.order_by(SeismModel.datetime)
-                if value == "datetime.desc":
-                    seisms = seisms.order_by(SeismModel.datetime.desc())
+            for key, value in filters:
+                # Filtros
+                # Filtros por seismId
+                if key == "sensorId":
+                    seisms = seisms.filter(SeismModel.sensorId == value)
 
-            # Paginacion
-            if key == "page":
-                page = value
-            if key == "per_page":
-                per_page = value
+                # Ordenamiento
+                if key == "sort_by":
+                    # Ordenamiento por datetime
+                    if value == "datetime":
+                        seisms = seisms.order_by(SeismModel.datetime)
+                    if value == "datetime.desc":
+                        seisms = seisms.order_by(SeismModel.datetime.desc())
+
+                # Paginacion
+                if key == "page":
+                    page = value
+                if key == "per_page":
+                    per_page = value
+        except:
+            pass
 
         seisms = seisms.paginate(page, per_page, True, 50)
         return jsonify(

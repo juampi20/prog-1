@@ -1,6 +1,9 @@
 <!-- Hereda del template main -->
 {% extends "main.html" %}
 
+<!-- Importar el archivo de macros -->
+{% import "macros.html" as macro %}
+
 <!-- Define el contenido -->
 {% block content %}
 <!-- Contenido -->
@@ -9,12 +12,12 @@
 
         <div class="col-md-2 d-none d-md-block"></div>
         <div class="col-md-8">
-            <h1>Verified Seism</h1>
+            <h1>Unverified Seism</h1>
 
             <div class="card text-white bg-dark" style="max-width: 100%;">
                 <div class="card-body">
                     <div class="card-title">
-                        <h3>Seism {{verified_seism.id}}</h3>
+                        <h3>Seism {{unverified_seism.id}}</h3>
                     </div>
                     <div class="card-text"></div>
                     <div class="table-responsive text-center">
@@ -22,27 +25,27 @@
                             <tbody>
                                 <tr>
                                     <td>Date Time</td>
-                                    <td>{{verified_seism.datetime}}</td>
+                                    <td>{{unverified_seism.datetime}}</td>
                                 </tr>
                                 <tr>
                                     <td>Depth</td>
-                                    <td>{{verified_seism.depth}}</td>
+                                    <td>{{unverified_seism.depth}}</td>
                                 </tr>
                                 <tr>
                                     <td>Magnitude</td>
-                                    <td>{{verified_seism.magnitude}}</td>
+                                    <td>{{unverified_seism.magnitude}}</td>
                                 </tr>
                                 <tr>
                                     <td>Latitude</td>
-                                    <td>{{verified_seism.latitude}}</td>
+                                    <td>{{unverified_seism.latitude}}</td>
                                 </tr>
                                 <tr>
                                     <td>Longitude</td>
-                                    <td>{{verified_seism.longitude}}</td>
+                                    <td>{{unverified_seism.longitude}}</td>
                                 </tr>
                                 <tr>
                                     <td>Sensor</td>
-                                    <td>{{verified_seism.sensorId}}</td>
+                                    <td>{{unverified_seism.sensorId}}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -55,5 +58,5 @@
 
     </div>
 </div>
-<!-- Fin Contenido -->
+<!-- Fin contenido -->
 {% endblock %}

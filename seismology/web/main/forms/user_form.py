@@ -3,7 +3,7 @@ from wtforms import PasswordField,SubmitField, BooleanField # Importa campos
 from wtforms.fields.html5 import EmailField # Importa campos HTML
 from wtforms import validators # Importa validaciones
 
-class UserForm(FlaskForm):
+class UserCreateForm(FlaskForm):
 
     # Definicion de campo Email
     email = EmailField("E-mail", [
@@ -20,7 +20,21 @@ class UserForm(FlaskForm):
 
     confirm = PasswordField("Repeat Password")
 
-    admin = BooleanField("Admin?")
+    admin = BooleanField("Admin")
+
+    # Definicion de campo Sumbit
+    submit = SubmitField("Send")
+
+class UserEditForm(FlaskForm):
+
+    # Definicion de campo Email
+    email = EmailField("E-mail", [
+        validators.Required(message = "E-mail is require"),
+        validators.Email(message = "Format not valid"),
+    ])
+
+    # Definicion de campo Admin
+    admin = BooleanField("Admin")
 
     # Definicion de campo Sumbit
     submit = SubmitField("Send")

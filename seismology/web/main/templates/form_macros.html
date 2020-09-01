@@ -20,3 +20,20 @@
 {% macro show_submit(field) %}
     {{ field(**kwargs) | safe }} <!-- Mostrar campo -->
 {% endmacro %}
+
+{# Renders checkbox fields since they are represented differently in bootstrap
+    Params:
+        field - WTForm field (there are no check, but you should put here only BooleanField.
+        kwargs - pass any arguments you want in order to put them into the html attributes.
+        There are few exceptions: for - for_, class - class_, class__ - class_
+
+    Example usage:
+        {{ macros.show_checkbox(form.remember_me) }}
+ #}
+{% macro show_checkbox(field) %}
+    <div class="checkbox">
+        <label>
+            {{ field(type='checkbox', **kwargs) }} {{ field.label }}
+        </label>
+    </div>
+{% endmacro %}

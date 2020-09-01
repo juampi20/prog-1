@@ -1,8 +1,10 @@
 body {
-    background: #2c2f33;
+    background-color: #212529;
     color: white;
-    margin: 0;
-    padding: 0;
+}
+
+.footer {
+    width: max-content;
 }
 
 .pagination>li>a {

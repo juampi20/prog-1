@@ -40,7 +40,7 @@ class User(db.Model):
         user_json = {
             "id": self.id,
             "email": str(self.email),
-            "admin": str(self.admin),
+            "admin": self.admin,
         }
         return user_json
 
