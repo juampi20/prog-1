@@ -1,10 +1,10 @@
+* {
+    box-sizing: border-box;
+}
+
 body {
     background-color: #212529;
     color: white;
-}
-
-.footer {
-    width: max-content;
 }
 
 .pagination>li>a {

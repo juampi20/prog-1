@@ -44,7 +44,7 @@ class Sensor(Resource):
 # Resource Sensors
 class Sensors(Resource):
     # Get resources list
-    # @admin_required
+    @admin_required
     def get(self):
         page = 1
         per_page = 50
@@ -101,7 +101,7 @@ class Sensors(Resource):
         return jsonify({"sensors": [sensor.to_json() for sensor in sensors.items]})
 
     # Insert resource
-    # @admin_required
+    @admin_required
     def post(self):
         sensor = SensorModel.from_json(request.get_json())
         try:

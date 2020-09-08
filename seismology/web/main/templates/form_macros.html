@@ -16,6 +16,13 @@
     {{ show_error(field) }} <!-- Llamar a macro que muestra el error -->
 {% endmacro %}
 
+<!-- Macro que se encarga de mostrar los campos del Login -->
+{% macro show_login(field) %}
+    <!-- {{ field.label }} Mostrar etiqueta -->
+    {{ field(placeholder=field.label.text, **kwargs) | safe }} <!-- Mostrar campo -->
+    {{ show_error(field) }} <!-- Llamar a macro que muestra el error -->
+{% endmacro %}
+
 <!-- Macro que se encarga de mostrar los campos tipo submit formulario -->
 {% macro show_submit(field) %}
     {{ field(**kwargs) | safe }} <!-- Mostrar campo -->
