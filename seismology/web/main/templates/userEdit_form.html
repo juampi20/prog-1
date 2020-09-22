@@ -15,7 +15,7 @@
         <div class="col-md-2 d-none d-md-block"></div>
         <div class="col-md-8">
             <h1>Edit User</h1>
-            <form method="POST" action="{{ url_for("user.edit", id=id) }}">
+            <form method="POST" action="{{ url_for('user.edit', id=id) }}">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
 
                 <div class="form-group">

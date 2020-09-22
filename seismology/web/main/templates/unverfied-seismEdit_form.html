@@ -19,21 +19,26 @@
       <form method="POST" action="{{ url_for("unverified_seism.edit", id=id) }}">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
 
-        <div class="container">
-          <div class="row">
-            <div class="col-md-12">
-              <div class="btn-group">
-                <label class="btn btn-primary pb-0 active">
-                  {{show_field(form.verified, type="checkbox")}}
-                </label>
-              </div>
-            </div>
+        <div class="form-group">
+          <div class="col-auto">
+            {{show_field(form.depth, type="form-control")}}
           </div>
-          <div class="row">
-            <div class="col-md-12">
-              {{ show_submit(form.submit, class="btn btn-success") }}
-            </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-auto">
+            {{show_field(form.magnitude, type="form-control")}}
           </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-auto">
+            {{show_field(form.verified, type="checkbox")}}
+          </div>
+        </div>
+
+        <div class="col-auto">
+          {{show_submit(form.submit, class="btn btn-success")}}
         </div>
 
       </form>

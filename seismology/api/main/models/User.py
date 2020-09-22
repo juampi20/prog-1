@@ -1,6 +1,6 @@
+from werkzeug.security import check_password_hash, generate_password_hash
+
 from .. import db
-# from flask import request
-from werkzeug.security import generate_password_hash, check_password_hash
 
 
 class User(db.Model):
@@ -20,7 +20,7 @@ class User(db.Model):
     @plain_password.setter
     def plain_password(self, password):
         # La asignacion a password va a llamar la funcion generate_password_hash()
-        #  para generar una contraseña encriptada.
+        # para generar una contraseña encriptada.
         self.password = generate_password_hash(password)
 
     # Esta funcion sirve para el login, para validar si la contraseña es correcta.

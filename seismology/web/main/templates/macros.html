@@ -34,13 +34,14 @@
   <td>
     <div class="btn-group" role="group">
 
-      <a class="btn btn-sm btn-dark" type="button" href="{{url_for('unverified_seism.view',id=unverified_seism.id)}}">
+      <a class="btn btn-sm btn-dark" type="button" href="{{url_for('unverified_seism.view', id=unverified_seism.id)}}">
         <i class="fas fa-eye"></i></a>
 
-      <a class="btn btn-sm btn-dark" type="button" href="{{url_for('unverified_seism.edit',id=unverified_seism.id)}}">
+      <a class="btn btn-sm btn-dark" type="button" href="{{url_for('unverified_seism.edit', id=unverified_seism.id)}}">
         <i class="fas fa-edit"></i></a>
 
-      <a class="btn btn-sm btn-dark" type="button" href="#">
+      <a class="btn btn-sm btn-dark" type="button"
+        href="{{url_for('unverified_seism.delete', id=unverified_seism.id)}}">
         <i class="fas fa-trash"></i></a>
 
     </div>
@@ -75,7 +76,7 @@
   <th scope="row">{{sensor.id}}</th>
   <td>{{sensor.name}}</td>
   <td>{{sensor.status}}</td>
-  <td>{{sensor.status}}</td>
+  <td>{{sensor.active}}</td>
   <td>
     {% if sensor.user %}
     {{sensor.user.email}}
@@ -84,15 +85,14 @@
   <td>
     <div class="btn-group" role="group">
 
-      <a class="btn btn-sm btn-dark" type="button" href="#">
+      <a class="btn btn-sm btn-dark" type="button" href="{{url_for('sensor.view',id=sensor.id)}}">
         <i class="fas fa-eye"></i></a>
 
-      <a class="btn btn-sm btn-dark" type="button" href="#">
-        <i class="fas fa-trash"></i></a>
-
-      <a class="btn btn-sm btn-dark" type="button" href="#">
+      <a class="btn btn-sm btn-dark" type="button" href="{{url_for('sensor.edit', id=sensor.id)}}">
         <i class="fas fa-edit"></i></a>
 
+      <a class="btn btn-sm btn-dark" type="button" href="{{url_for('sensor.delete',id=sensor.id)}}">
+        <i class="fas fa-trash"></i></a>
     </div>
   </td>
 </tr>

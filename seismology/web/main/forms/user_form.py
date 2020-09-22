@@ -1,21 +1,22 @@
-from flask_wtf import FlaskForm # Importa funciones de formulario
-from wtforms import PasswordField,SubmitField, BooleanField # Importa campos
-from wtforms.fields.html5 import EmailField # Importa campos HTML
-from wtforms import validators # Importa validaciones
+from flask_wtf import FlaskForm
+from wtforms import BooleanField, PasswordField, SubmitField
+from wtforms import validators
+from wtforms.fields.html5 import EmailField  # Importa validaciones
+
 
 class UserCreateForm(FlaskForm):
 
     # Definicion de campo Email
     email = EmailField("E-mail", [
-        validators.Required(message = "E-mail is require"),
-        validators.Email(message = "Format not valid"),
+        validators.Required(message="E-mail is require"),
+        validators.Email(message="Format not valid"),
     ])
 
     # Definicion de campo Contraseña
     password = PasswordField("Password", [
         validators.Required(),
         # El campo de contraseña debe coincidir con el de confirmar
-        validators.EqualTo("confirm", message = "Passwords dont match")
+        validators.EqualTo("confirm", message="Passwords dont match")
     ])
 
     confirm = PasswordField("Repeat Password")
@@ -25,12 +26,13 @@ class UserCreateForm(FlaskForm):
     # Definicion de campo Sumbit
     submit = SubmitField("Send")
 
+
 class UserEditForm(FlaskForm):
 
     # Definicion de campo Email
     email = EmailField("E-mail", [
-        validators.Required(message = "E-mail is require"),
-        validators.Email(message = "Format not valid"),
+        validators.Required(message="E-mail is require"),
+        validators.Email(message="Format not valid"),
     ])
 
     # Definicion de campo Admin

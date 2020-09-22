@@ -1,10 +1,11 @@
-from main import db
-from main.models import SensorModel, SeismModel
 import socket
 import time
 
-# Crear socket
-def create_socket():
+from main import db
+from main.models import SeismModel, SensorModel
+
+
+def create_socket():  # Crear socket
     try:
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         s.settimeout(2)
@@ -13,8 +14,8 @@ def create_socket():
         print('Failed to create socket')
         return None
 
-# Checkear estado sensor
-def check_sensor(id):
+
+def check_sensor(id):  # Checkear estado sensor
     sensor = db.session.query(SensorModel).get_or_404(id)
     s = create_socket()
     if s:
@@ -27,8 +28,8 @@ def check_sensor(id):
         except socket.timeout:
             print("Sensor"+sensor.name+" no responde")
 
-# Llamar a sensores
-def call_sensors(app):
+
+def call_sensors(app):  # Llamar a sensores
     with app.app_context():
         s = create_socket()
         while s:
