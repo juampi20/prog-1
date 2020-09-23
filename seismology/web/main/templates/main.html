@@ -1,5 +1,5 @@
 <!-- Importar macros de formulario -->
-{% from "form_macros.html" import show_field, show_submit, show_login %}
+{% from "form_macros.html" import show_field, show_submit, show_placeholder %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -78,10 +78,10 @@
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             <div class="form-row">
               <div class="form-group col-md-5">
-                {{ show_login(loginForm.email, class="form-control mr-sm-2") }}
+                {{ show_placeholder(loginForm.email, class="form-control mr-sm-2") }}
               </div>
               <div class="form-group col-md-5">
-                {{ show_login(loginForm.password, class="form-control") }}
+                {{ show_placeholder(loginForm.password, class="form-control") }}
               </div>
               <div class="form-group col-md-2">
                 {{ show_submit(loginForm.submit, class="btn btn-success") }}

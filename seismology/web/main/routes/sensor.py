@@ -1,10 +1,10 @@
 import json
 
-from flask import Blueprint, flash, redirect, render_template, url_for
+from flask import Blueprint, flash, redirect, render_template, url_for, request
 from flask_breadcrumbs import register_breadcrumb
 from flask_login import login_required
 
-from ..forms.sensor_form import SensorCreateForm, SensorEditForm
+from ..forms.sensor_form import SensorCreateForm, SensorEditForm, SensorFilterForm
 from ..utilities.functions import sendRequest
 from .auth import admin_required
 
@@ -16,14 +16,56 @@ sensor = Blueprint("sensor", __name__, url_prefix="/sensor")
 @admin_required
 @register_breadcrumb(sensor, ".", "Sensors")
 def index():
+    # Eliminar la protección csrf para el formulario de filtro
+    # Cargar parametros de la url en el formulario
+    filter = SensorFilterForm(request.args, meta={'crsf': False})
+    # Obtener usuarios
+    r = sendRequest(method="get",
+                    url="/users",
+                    auth=True)
+    
+    # FIXME: No andan los filtros
+    
+    # Cargar usuarios en el formulario
+    filter.userId.choices = [(item['id'], item['email']) for item in json.loads(r.text)["Users"]]
+    filter.userId.choices.insert(0, [0, 'All'])
+    data = {}
+    # Aplicado de filtros
+    # Validar formulario
+    if filter.validate():
+        if filter.name.data != None:
+            data['name'] = filter.name.data
+        if filter.status.data != None:
+            data['status'] = filter.status.data
+        if filter.active.data != None:
+            data['active'] = filter.active.data
+        if filter.userId.data != None and filter.userId.data != 0:
+            data['userId'] = filter.userId.data
+    # Numero de pagina
+    if 'page' in request.args:
+        data['page'] = request.args.get('page', '')
+    # Ordenamiento
+    if 'sort_by' in request.args:
+        data['sort_by'] = request.args.get('sort_by', '')
+    # Obtener datos de la api
     r = sendRequest(method="get",
                     url="/sensors",
+                    data=json.dumps(data),
                     auth=True)
-    sensors = json.loads(r.text)["sensors"]
-    title = "Sensors"
-    return render_template("sensors.html",
-                           title=title,
-                           sensors=sensors)
+    if (r.status_code == 200):
+        sensors = json.loads(r.text)["sensors"]
+        pagination = {}
+        pagination['total'] = json.loads(r.text)['total']
+        pagination['pages'] = json.loads(r.text)['pages']
+        pagination['current_page'] = json.loads(r.text)['page']
+        title = "Sensors"
+        return render_template("sensors.html",
+                               title=title,
+                               sensors=sensors,
+                               filter=filter,
+                               pagination=pagination)
+    else:
+        redirect(url_for('main.logout'))
 
 
 @sensor.route("/view/<int:id>")
@@ -77,12 +119,10 @@ def edit(id):
     req = sendRequest(method="get",
                       url="/users",
                       auth=True)
-    users = json.loads(req.text)["Users"]
-    users_list = [(0, "Select one user email")]
-    for user in users:
-        users_list.append((user["id"], user["email"]))
-    form.userId.choices = users_list
-    print(users_list)
+    users = [(item['id'], item['email'])
+             for item in json.loads(req.text)["Users"]]
+    form.userId.choices = users
+    form.userId.choices.insert(0, [0, 'Select one user'])
     if not form.is_submitted():
         r = sendRequest(method="get",
                         url="/sensor/"+str(id),
@@ -102,9 +142,8 @@ def edit(id):
         # Load users
         try:
             user = sensor["user"]
-            for user_id, email in users_list:
-                if user_id == int(user["id"]):
-                    form.userId.data = int(user_id)
+            form.userId.data = [int(user_id)
+                                for user_id in users if user_id == int(user["id"])]
         except KeyError:
             pass
 

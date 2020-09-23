@@ -46,7 +46,6 @@ def unauthorized_callback():
 def admin_required(fn):  # Define la función de verificación de admin para las rutas
     @wraps(fn)
     def wrapper(*args, **kws):
-        print(current_user.admin)
         if not current_user.admin:
             flash('Acceso restringido a administradores.', 'warning')
             return redirect(url_for('main.index'))

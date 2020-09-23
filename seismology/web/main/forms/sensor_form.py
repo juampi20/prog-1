@@ -61,3 +61,11 @@ class SensorEditForm(FlaskForm):
     )
 
     submit = SubmitField(label="Send")
+
+
+class SensorFilterForm(FlaskForm):
+    name = StringField('Name', [validators.optional()])
+    status = BooleanField('Status', [validators.optional()])
+    active = BooleanField('Active', [validators.optional()])
+    userId = SelectField('Users', [validators.optional()], coerce=int)
+    submit = SubmitField("Filter")

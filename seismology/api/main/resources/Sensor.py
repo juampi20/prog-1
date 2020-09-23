@@ -1,7 +1,9 @@
-from flask import request, jsonify
+from flask import jsonify, request
 from flask_restful import Resource
-from main.models import SensorModel
+
 from main.auth.decorators import admin_required
+from main.models import SensorModel
+
 from .. import db
 
 # Resource Sensor
@@ -47,58 +49,54 @@ class Sensors(Resource):
     @admin_required
     def get(self):
         page = 1
-        per_page = 50
-
+        per_page = 10
+        filters = request.get_json().items()
         sensors = db.session.query(SensorModel)
+        for key, value in filters:
+            # Filtros
+            # Filtro pot userId
+            if key == "userId[lte]":
+                sensors = sensors.filter(SensorModel.userId <= value)
+            if key == "userId[gte]":
+                sensors = sensors.filter(SensorModel.userId >= value)
+            if key == "userId":
+                sensors = sensors.filter(SensorModel.userId == value)
+            # Filtro por active
+            if key == "active":
+                sensors = sensors.filter(SensorModel.active == value)
+            # Filtro por status
+            if key == "status":
+                sensors = sensors.filter(SensorModel.status == value)
 
-        try:
-            
-            filters = request.get_json().items()
+            # Ordenamiento
+            if key == "sort_by":
+                # Ordenamiento por name
+                if value == "name":
+                    sensors = sensors.order_by(SensorModel.name)
+                if value == "name.desc":
+                    sensors = sensors.order_by(SensorModel.name.desc())
+                # Ordenamiento por status
+                if value == "status":
+                    sensors = sensors.order_by(SensorModel.status)
+                if value == "status.desc":
+                    sensors = sensors.order_by(SensorModel.status.desc())
+                # Ordenamiento por active
+                if value == "active":
+                    sensors = sensors.order_by(SensorModel.active)
+                if value == "active.desc":
+                    sensors = sensors.order_by(SensorModel.active.desc())
 
-            for key, value in filters:
-                # Filtros
-                # Filtro pot userId
-                if key == "userId[lte]":
-                    sensors = sensors.filter(SensorModel.userId <= value)
-                if key == "userId[gte]":
-                    sensors = sensors.filter(SensorModel.userId >= value)
-                if key == "userId":
-                    sensors = sensors.filter(SensorModel.userId == value)
-                # Filtro por active
-                if key == "active":
-                    sensors = sensors.filter(SensorModel.active == value)
-                # Filtro por status
-                if key == "status":
-                    sensors = sensors.filter(SensorModel.status == value)
-
-                # Ordenamiento
-                if key == "sort_by":
-                    # Ordenamiento por name
-                    if value == "name":
-                        sensors = sensors.order_by(SensorModel.name)
-                    if value == "name.desc":
-                        sensors = sensors.order_by(SensorModel.name.desc())
-                    # Ordenamiento por status
-                    if value == "status":
-                        sensors = sensors.order_by(SensorModel.status)
-                    if value == "status.desc":
-                        sensors = sensors.order_by(SensorModel.status.desc())
-                    # Ordenamiento por active
-                    if value == "active":
-                        sensors = sensors.order_by(SensorModel.active)
-                    if value == "active.desc":
-                        sensors = sensors.order_by(SensorModel.active.desc())
-
-                # Paginacion
-                if key == "page":
-                    page = value
-                if key == "per_page":
-                    per_page = value
-        except:
-            pass
+            # Paginacion
+            if key == "page":
+                page = int(value)
+            if key == "per_page":
+                per_page = int(value)
 
         sensors = sensors.paginate(page, per_page, True, 100)
-        return jsonify({"sensors": [sensor.to_json() for sensor in sensors.items]})
+        return jsonify({"sensors": [sensor.to_json() for sensor in sensors.items],
+                        'total': sensors.total,
+                        'pages': sensors.pages,
+                        'page': page})
 
     # Insert resource
     @admin_required

@@ -4,6 +4,8 @@
 <!-- Importar el archivo de macros -->
 {% import "macros.html" as macro %}
 
+{% from "form_macros.html" import show_field, show_submit, show_checkbox, show_placeholder %}
+
 <!-- Define el contenido -->
 {% block content %}
 <!-- Contenido -->
@@ -15,7 +17,30 @@
 
       <h2 class="text-uppercase text-center text-white mb-0">{{title}}</h2>
       <hr class="bg-white mb-5" />
-
+      <form method="GET" action="{{url_for('sensor.index')}}">
+        <div class="form-row">
+          <div class="form-group col-md-3">
+            {{show_placeholder(filter.name, class='form-control')}}
+          </div>
+          <div class="form-group col-md-2">
+            {{show_field(filter.status, type='checkbox')}}
+          </div>
+          <div class="form-group col-md-2">
+            {{show_field(filter.active, type='checkbox')}}
+          </div>
+          <div class="form-group col-md-3">
+            {{show_placeholder(filter.userId, class='form-control')}}
+          </div>
+          <div class="form-group col-md-2">
+            {{show_submit(filter.submit, class='btn btn-success')}}
+          </div>
+        </div>
+      </form>
+      <div class="row">
+        <div class="col-md-6">
+          Total: {{pagination.total}}
+        </div>
+      </div>
       <!-- Tabla -->
       <div class="table-responsive text-center">
         <table class="table table-dark table-striped table-hover table-bordered">
@@ -47,21 +72,58 @@
   </div>
 
   <!-- Pagination -->
-  <nav aria-label="Page navigation example">
+  <nav aria-label="Pagination">
     <ul class="pagination justify-content-center">
+      {% if pagination.current_page != 1 %}
       <li class="page-item">
-        <a class="page-link" href="#" aria-label="Previous">
+        <a class="page-link" href="{{ url_for('sensor.index',
+        page = (pagination.current_page-1),
+        name = request.args.name,
+        status = request.args.status,
+        active = request.args.active,
+        userId = request.args.userId )}}" aria-label="Previous">
           <span aria-hidden="true">&laquo;</span>
         </a>
       </li>
-      <li class="page-item"><a class="page-link" href="#">1</a></li>
-      <li class="page-item"><a class="page-link" href="#">2</a></li>
-      <li class="page-item"><a class="page-link" href="#">3</a></li>
+      {% else %}
+      <li class="page-item disabled">
+        <a href="#" class="page-link" tabindex="-1" aria-disabled="true" aria-label="Previous">
+          <span aria-hidden="true">&laquo;</span></a>
+      </li>
+      {% endif %}
+      {% for n in range(1, pagination.pages+1) %}
+      {% if n != pagination.current_page %}
       <li class="page-item">
-        <a class="page-link" href="#" aria-label="Next">
+        <a class="page-link" href="{{ url_for('sensor.index',
+        page = n,
+        name = request.args.name,
+        status = request.args.status,
+        active = request.args.active,
+        userId = request.args.userId )}}">{{n}}</a>
+      </li>
+      {% else %}
+      <li class="page-item disabled">
+        <a class="page-link" href="#" tabindex="+1" aria-disabled="true">{{n}}</a>
+      </li>
+      {% endif %}
+      {% endfor %}
+      {% if pagination.current_page != pagination.pages %}
+      <li class="page-item">
+        <a class="page-link" href="{{ url_for('sensor.index',
+        page = (pagination.current_page+1),
+        name = request.args.name,
+        status = request.args.status,
+        active = request.args.active,
+        userId = request.args.userId )}}" aria-label="Next">
           <span aria-hidden="true">&raquo;</span>
         </a>
       </li>
+      {% else %}
+      <li class="page-item disabled">
+        <a href="#" class="page-link" tabindex="-1" aria-disabled="true" aria-label="Next">
+          <span aria-hidden="true">&raquo;</span></a>
+      </li>
+      {% endif %}
     </ul>
   </nav>
 </div>
