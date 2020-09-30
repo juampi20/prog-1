@@ -7,17 +7,23 @@ from wtforms.fields.html5 import EmailField  # Importa validaciones
 class UserCreateForm(FlaskForm):
 
     # Definicion de campo Email
-    email = EmailField("E-mail", [
-        validators.Required(message="E-mail is require"),
-        validators.Email(message="Format not valid"),
-    ])
+    email = EmailField(
+        "E-mail",
+        [
+            validators.Required(message="E-mail is require"),
+            validators.Email(message="Format not valid"),
+        ],
+    )
 
     # Definicion de campo Contraseña
-    password = PasswordField("Password", [
-        validators.Required(),
-        # El campo de contraseña debe coincidir con el de confirmar
-        validators.EqualTo("confirm", message="Passwords dont match")
-    ])
+    password = PasswordField(
+        "Password",
+        [
+            validators.Required(),
+            # El campo de contraseña debe coincidir con el de confirmar
+            validators.EqualTo("confirm", message="Passwords dont match"),
+        ],
+    )
 
     confirm = PasswordField("Repeat Password")
 
@@ -30,10 +36,13 @@ class UserCreateForm(FlaskForm):
 class UserEditForm(FlaskForm):
 
     # Definicion de campo Email
-    email = EmailField("E-mail", [
-        validators.Required(message="E-mail is require"),
-        validators.Email(message="Format not valid"),
-    ])
+    email = EmailField(
+        "E-mail",
+        [
+            validators.Required(message="E-mail is require"),
+            validators.Email(message="Format not valid"),
+        ],
+    )
 
     # Definicion de campo Admin
     admin = BooleanField("Admin")

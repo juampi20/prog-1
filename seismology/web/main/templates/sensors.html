@@ -17,6 +17,7 @@
 
       <h2 class="text-uppercase text-center text-white mb-0">{{title}}</h2>
       <hr class="bg-white mb-5" />
+
       <form method="GET" action="{{url_for('sensor.index')}}">
         <div class="form-row">
           <div class="form-group col-md-3">
@@ -36,6 +37,7 @@
           </div>
         </div>
       </form>
+
       <div class="row">
         <div class="col-md-6">
           Total: {{pagination.total}}
@@ -50,9 +52,57 @@
           <thead>
             <tr>
               <th scope="col">#</th>
-              <th scope="col">Name</th>
-              <th scope="col">Status</th>
-              <th scope="col">Active</th>
+              <th scope="col">
+                {% if request.args.sort_by == "name.desc"  %}
+                <a class="text-white" href="{{ url_for('sensor.index',
+                sort_by = 'name',
+                name = request.args.name,
+                status = request.args.status,
+                active = request.args.active,
+                userId = request.args.userId )}}">Name</a>
+                {% else %}
+                <a class="text-white" href="{{ url_for('sensor.index',
+                sort_by = 'name.desc',
+                name = request.args.name,
+                status = request.args.status,
+                active = request.args.active,
+                userId = request.args.userId )}}">Name</a>
+                {% endif %}
+              </th>
+              <th scope="col">
+                {% if request.args.sort_by == "status.desc" %}
+                <a class="text-white" href="{{ url_for('sensor.index',
+                sort_by = 'status',
+                name = request.args.name,
+                status = request.args.status,
+                active = request.args.active,
+                userId = request.args.userId )}}">Status</a>
+                {% else %}
+                <a class="text-white" href="{{ url_for('sensor.index',
+                sort_by = 'status.desc',
+                name = request.args.name,
+                status = request.args.status,
+                active = request.args.active,
+                userId = request.args.userId )}}">Status</a>
+                {% endif %}
+              </th>
+              <th scope="col">
+                {% if request.args.sort_by == "status.desc" %}
+                <a class="text-white" href="{{ url_for('sensor.index',
+                sort_by = 'active',
+                name = request.args.name,
+                status = request.args.status,
+                active = request.args.active,
+                userId = request.args.userId )}}">Active</a>
+                {% else %}
+                <a class="text-white" href="{{ url_for('sensor.index',
+                sort_by = 'active.desc',
+                name = request.args.name,
+                status = request.args.status,
+                active = request.args.active,
+                userId = request.args.userId )}}">Active</a>
+                {% endif %}
+              </th>
               <th scope="col">User Associated</th>
               <th scope="col">Actions</th>
             </tr>

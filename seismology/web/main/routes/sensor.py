@@ -18,54 +18,55 @@ sensor = Blueprint("sensor", __name__, url_prefix="/sensor")
 def index():
     # Eliminar la protección csrf para el formulario de filtro
     # Cargar parametros de la url en el formulario
-    filter = SensorFilterForm(request.args, meta={'crsf': False})
+    filter = SensorFilterForm(request.args, meta={"csrf": False})
     # Obtener usuarios
-    r = sendRequest(method="get",
-                    url="/users",
-                    auth=True)
-    
-    # FIXME: No andan los filtros
-    
+    r = sendRequest(method="get", url="/users", auth=True)
+
     # Cargar usuarios en el formulario
-    filter.userId.choices = [(item['id'], item['email']) for item in json.loads(r.text)["Users"]]
-    filter.userId.choices.insert(0, [0, 'All'])
+    filter.userId.choices = [
+        (int(user["id"]), user["email"]) for user in json.loads(r.text)["Users"]
+    ]
+    filter.userId.choices.insert(0, [0, "All"])
     data = {}
     # Aplicado de filtros
-    # Validar formulario
+    # Validar formulario de filtro
     if filter.validate():
-        if filter.name.data != None:
-            data['name'] = filter.name.data
-        if filter.status.data != None:
-            data['status'] = filter.status.data
-        if filter.active.data != None:
-            data['active'] = filter.active.data
         if filter.userId.data != None and filter.userId.data != 0:
-            data['userId'] = filter.userId.data
-    # Numero de pagina
-    if 'page' in request.args:
-        data['page'] = request.args.get('page', '')
+            data["userId"] = filter.userId.data
+        if filter.name.data != None:
+            data["name"] = filter.name.data
+        if filter.status.data:
+            data["status"] = filter.status.data
+        if filter.active.data:
+            data["active"] = filter.active.data
+
     # Ordenamiento
-    if 'sort_by' in request.args:
-        data['sort_by'] = request.args.get('sort_by', '')
+    if "sort_by" in request.args:
+        data["sort_by"] = request.args.get("sort_by", "")
+
+    # Numero de pagina
+    if "page" in request.args:
+        data["page"] = request.args.get("page", "")
+
     # Obtener datos de la api
-    r = sendRequest(method="get",
-                    url="/sensors",
-                    data=json.dumps(data),
-                    auth=True)
-    if (r.status_code == 200):
+    r = sendRequest(method="get", url="/sensors", data=json.dumps(data), auth=True)
+
+    if r.status_code == 200:
         sensors = json.loads(r.text)["sensors"]
         pagination = {}
-        pagination['total'] = json.loads(r.text)['total']
-        pagination['pages'] = json.loads(r.text)['pages']
-        pagination['current_page'] = json.loads(r.text)['page']
+        pagination["total"] = json.loads(r.text)["total"]
+        pagination["pages"] = json.loads(r.text)["pages"]
+        pagination["current_page"] = json.loads(r.text)["page"]
         title = "Sensors"
-        return render_template("sensors.html",
-                               title=title,
-                               sensors=sensors,
-                               filter=filter,
-                               pagination=pagination)
+        return render_template(
+            "sensors.html",
+            title=title,
+            sensors=sensors,
+            filter=filter,
+            pagination=pagination,
+        )
     else:
-        redirect(url_for('main.logout'))
+        redirect(url_for("main.logout"))
 
 
 @sensor.route("/view/<int:id>")
@@ -73,17 +74,13 @@ def index():
 @admin_required
 @register_breadcrumb(sensor, ".view", "Sensor")
 def view(id):
-    r = sendRequest(method="get",
-                    url="/sensor/" + str(id),
-                    auth=True)
-    if (r.status_code == 404):
+    r = sendRequest(method="get", url="/sensor/" + str(id), auth=True)
+    if r.status_code == 404:
         flash("Sensor not found", "danger")
         return redirect(url_for("sensor.index"))
     sensor = json.loads(r.text)
     title = "Sensor View"
-    return render_template("sensor.html",
-                           title=title,
-                           sensor=sensor)
+    return render_template("sensor.html", title=title, sensor=sensor)
 
 
 @sensor.route("/create", methods=["GET", "POST"])
@@ -92,7 +89,9 @@ def view(id):
 @register_breadcrumb(sensor, ".create", "Create Sensor")
 def create():
     form = SensorCreateForm()  # Instanciar formulario
-    if form.validate_on_submit():  # Si el formulario ha sido enviado y es valido correctamente
+    if (
+        form.validate_on_submit()
+    ):  # Si el formulario ha sido enviado y es valido correctamente
         sensor = {
             "name": form.name.data,
             "ip": form.ip.data,
@@ -102,10 +101,7 @@ def create():
             "userId": form.userId.data,
         }
         data = json.dumps(sensor)
-        r = sendRequest(method="post",
-                        url="/sensors",
-                        data=data,
-                        auth=True)
+        r = sendRequest(method="post", url="/sensors", data=data, auth=True)
         return redirect(url_for("sensor.index"))  # Redirecciona a la lista
     return render_template("sensorEdit_form.html", form=form)
 
@@ -116,17 +112,12 @@ def create():
 @register_breadcrumb(sensor, ".edit", "Edit Sensor")
 def edit(id):
     form = SensorEditForm()
-    req = sendRequest(method="get",
-                      url="/users",
-                      auth=True)
-    users = [(item['id'], item['email'])
-             for item in json.loads(req.text)["Users"]]
+    req = sendRequest(method="get", url="/users", auth=True)
+    users = [(int(item["id"]), item["email"]) for item in json.loads(req.text)["Users"]]
     form.userId.choices = users
-    form.userId.choices.insert(0, [0, 'Select one user'])
+    form.userId.choices.insert(0, [0, "Select one user"])
     if not form.is_submitted():
-        r = sendRequest(method="get",
-                        url="/sensor/"+str(id),
-                        auth=True)
+        r = sendRequest(method="get", url="/sensor/" + str(id), auth=True)
         if r.status_code == 404:
             flash("Sensor not found", "danger")
             return redirect(url_for("sensor.index"))
@@ -141,9 +132,9 @@ def edit(id):
 
         # Load users
         try:
-            user = sensor["user"]
-            form.userId.data = [int(user_id)
-                                for user_id in users if user_id == int(user["id"])]
+            for user_id, user_email in users:
+                if sensor["user"]["id"] == user_id:
+                    form.userId.data = user_id
         except KeyError:
             pass
 
@@ -154,27 +145,20 @@ def edit(id):
             "port": form.port.data,
             "status": form.status.data,
             "active": form.active.data,
-            "userId": form.userId.data
+            "userId": form.userId.data,
         }
         data = json.dumps(sensor)
-        r = sendRequest(method="put",
-                        url="/sensor/" + str(id),
-                        data=data,
-                        auth=True)
+        r = sendRequest(method="put", url="/sensor/" + str(id), data=data, auth=True)
         flash("Sensor edited", "success")
         return redirect(url_for("sensor.index"))
 
-    return render_template("sensorEdit_form.html",
-                           id=id,
-                           form=form)
+    return render_template("sensorEdit_form.html", id=id, form=form)
 
 
 @sensor.route("/delete/<int:id>")
 @login_required
 @admin_required
 def delete(id):
-    r = sendRequest(method="delete",
-                    url="/sensor/"+str(id),
-                    auth=True)
+    r = sendRequest(method="delete", url="/sensor/" + str(id), auth=True)
     flash("Sensor deleted", "danger")
     return redirect(url_for("sensor.index"))

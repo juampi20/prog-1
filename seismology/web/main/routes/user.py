@@ -28,8 +28,8 @@ def index():
 @admin_required
 @register_breadcrumb(user, ".view", "View")
 def view(id):
-    r = sendRequest(method="get", url="/user/"+str(id), auth=True)
-    if (r.status_code == 404):
+    r = sendRequest(method="get", url="/user/" + str(id), auth=True)
+    if r.status_code == 404:
         flash("User not found", "danger")
         return redirect(url_for("user.index"))
     user = json.loads(r.text)
@@ -43,17 +43,16 @@ def view(id):
 @register_breadcrumb(user, ".create", "Create User")
 def create():
     form = UserCreateForm()  # Instanciar formulario
-    if form.validate_on_submit():  # Si el formulario ha sido enviado y es valido correctamente
+    if (
+        form.validate_on_submit()
+    ):  # Si el formulario ha sido enviado y es valido correctamente
         user = {
             "email": form.email.data,
             "password": form.password.data,
-            "admin": form.admin.data
+            "admin": form.admin.data,
         }
         data = json.dumps(user)
-        r = sendRequest(method="post",
-                        url="/users",
-                        data=data,
-                        auth=True)
+        r = sendRequest(method="post", url="/users", data=data, auth=True)
         return redirect(url_for("user.index"))  # Redirecciona a la lista
     # Muestra el formulario
     return render_template("userCreate_form.html", form=form)
@@ -66,10 +65,8 @@ def create():
 def edit(id):
     form = UserEditForm()
     if not form.is_submitted():
-        r = sendRequest(method="get",
-                        url="/user/"+str(id),
-                        auth=True)
-        if (r.status_code == 404):
+        r = sendRequest(method="get", url="/user/" + str(id), auth=True)
+        if r.status_code == 404:
             flash("User not found", "danger")
             return redirect(url_for("user.index"))
         user = json.loads(r.text)
@@ -77,28 +74,18 @@ def edit(id):
         form.admin.data = user["admin"]
 
     if form.validate_on_submit():
-        user = {
-            "email": form.email.data,
-            "admin": form.admin.data
-        }
+        user = {"email": form.email.data, "admin": form.admin.data}
         data = json.dumps(user)
-        r = sendRequest(method="put",
-                        url="/user/" + str(id),
-                        data=data,
-                        auth=True)
+        r = sendRequest(method="put", url="/user/" + str(id), data=data, auth=True)
         flash("User edited", "success")
         return redirect(url_for("user.index"))
-    return render_template("userEdit_form.html",
-                           form=form,
-                           id=id)
+    return render_template("userEdit_form.html", form=form, id=id)
 
 
 @user.route("/delete/<int:id>")
 @login_required
 @admin_required
 def delete(id):
-    r = sendRequest(method="delete",
-                    url="/user/"+str(id),
-                    auth=True)
+    r = sendRequest(method="delete", url="/user/" + str(id), auth=True)
     flash("User deleted", "danger")
     return redirect(url_for("user.index"))

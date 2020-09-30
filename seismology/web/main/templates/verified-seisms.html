@@ -16,6 +16,35 @@
         <h2 class="text-uppercase text-center text-white mb-0">{{title}}</h2>
         <hr class="bg-white mb-5" />
 
+        <form method="GET" action="{{url_for('sensor.index')}}">
+          <div class="form-row">
+            <div class="form-group col-md-3">
+              {{show_placeholder(filter.sensorName, class='form-control')}}
+            </div>
+            <div class="form-group col-md-2">
+              {{show_field(filter.depth, class='form-control')}}
+            </div>
+            <div class="form-group col-md-2">
+              {{show_field(filter.magnitude, class='form-control')}}
+            </div>
+            <div class="form-group col-md-3">
+              {{show_placeholder(filter.datetimeFrom, class='form-control')}}
+            </div>
+            <div class="form-group col-md-3">
+              {{show_placeholder(filter.datetimeTo, class='form-control')}}
+            </div>
+            <div class="form-group col-md-2">
+              {{show_submit(filter.submit, class='btn btn-success')}}
+            </div>
+          </div>
+        </form>
+  
+        <div class="row">
+          <div class="col-md-6">
+            Total: {{pagination.total}}
+          </div>
+        </div>
+
         <!-- Tabla -->
         <div class="table-responsive text-center">
           <table class="table table-dark table-striped table-hover table-bordered">

@@ -1,17 +1,19 @@
 from functools import wraps
 
-from flask import flash, redirect, request, url_for
-from flask_login import LoginManager, UserMixin, current_user
 import jwt
+from flask import flash, redirect, request, url_for
+from flask_login import UserMixin, current_user
 
 from .. import login_manager
 
 
-class User(UserMixin):  # Clase que contendra los datos del usuario logueado.
+# Clase que contendra los datos del usuario logueado.
+class User(UserMixin):
     def __init__(self, id, email, admin):
         self.id = id
         self.email = email
         self.admin = admin
+
 
 # Método que le indica a LoginManager como obtener los datos del usuario logueado
 # En nuestro caso al trabajar con JWT los datos se obtendran de los claims (decorador) del Token
@@ -25,8 +27,7 @@ def load_user(request):
             decoded = jwt.decode(request.cookies["access_token"], verify=False)
             user_data = decoded["user_claims"]
             # Cargar datos del usuario
-            user = User(user_data["id"],
-                        user_data["email"], user_data["admin"])
+            user = User(user_data["id"], user_data["email"], user_data["admin"])
             # Devolver usuario logueado con los datos cargados
             return user
         except jwt.exceptions.InvalidTokenError:
@@ -38,16 +39,17 @@ def load_user(request):
 
 @login_manager.unauthorized_handler
 def unauthorized_callback():
-    flash('Debe iniciar sesión para continuar.', 'warning')
+    flash("Debe iniciar sesión para continuar.", "warning")
     # Redireccionar a la página que contiene el formulario de login
-    return redirect(url_for('main.index'))
+    return redirect(url_for("main.index"))
 
 
 def admin_required(fn):  # Define la función de verificación de admin para las rutas
     @wraps(fn)
     def wrapper(*args, **kws):
         if not current_user.admin:
-            flash('Acceso restringido a administradores.', 'warning')
-            return redirect(url_for('main.index'))
+            flash("Acceso restringido a administradores.", "warning")
+            return redirect(url_for("main.index"))
         return fn(*args, **kws)
+
     return wrapper

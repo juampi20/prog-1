@@ -11,7 +11,7 @@ def create_socket():  # Crear socket
         s.settimeout(2)
         return s
     except socket.error:
-        print('Failed to create socket')
+        print("Failed to create socket")
         return None
 
 
@@ -22,11 +22,11 @@ def check_sensor(id):  # Checkear estado sensor
         s.sendto(b" ", (sensor.ip, sensor.port))
         try:
             d = s.recvfrom(1024)[0]
-            sensors.status = True
+            sensor.status = True
             db.session.add(sensor)
             db.session.commit()
         except socket.timeout:
-            print("Sensor"+sensor.name+" no responde")
+            print("Sensor" + sensor.name + " no responde")
 
 
 def call_sensors(app):  # Llamar a sensores
@@ -51,5 +51,5 @@ def call_sensors(app):  # Llamar a sensores
                     sensor.status = False
                     db.session.add(sensor)
                     db.session.commit()
-                    print("Sensor "+sensor.name+" no responde")
+                    print("Sensor " + sensor.name + " no responde")
             time.sleep(2)

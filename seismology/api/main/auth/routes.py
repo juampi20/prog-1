@@ -1,10 +1,10 @@
-from flask import request, jsonify, Blueprint
-from flask_jwt_extended import jwt_required, get_jwt_identity, create_access_token
-from .. import db
-from main.models import UserModel, SensorModel
-from main.mail.functions import sendMail
+from flask import Blueprint, jsonify, request
+from flask_jwt_extended import create_access_token
 from main.auth.decorators import admin_required
+from main.mail.functions import sendMail
+from main.models import SensorModel, UserModel
 
+from .. import db
 
 # Los Blueprint ayudan a generar rutas mas facilmente cuando
 # estamos trabajando con muchos objetos o rutas.
@@ -53,7 +53,9 @@ def checkStatus():
         admins = db.session.query(UserModel).filter(UserModel.admin == True).all()
         if admins:
             adminList = [admin.email for admin in admins]
-            sendMail(adminList, "Desactivated sensors", "mail/sensor", sensorList=sensors)
+            sendMail(
+                adminList, "Desactivated sensors", "mail/sensor", sensorList=sensors
+            )
         return jsonify({"sensors": [sensor.to_json() for sensor in sensors]})
     else:
         return "There are not deactivated sensors", 200

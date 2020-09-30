@@ -11,13 +11,13 @@ from .. import db
 
 class Sensor(Resource):
     # Get resource
-    # @admin_required
+    @admin_required
     def get(self, id):
         sensor = db.session.query(SensorModel).get_or_404(id)
         return sensor.to_json()
 
     # Modify resource
-    # @admin_required
+    @admin_required
     def put(self, id):
         sensor = db.session.query(SensorModel).get_or_404(id)
         data = request.get_json().items()
@@ -31,7 +31,7 @@ class Sensor(Resource):
             return str(error), 400
 
     # Delete resource
-    # @admin_required
+    @admin_required
     def delete(self, id):
         sensor = db.session.query(SensorModel).get_or_404(id)
         db.session.delete(sensor)
@@ -55,6 +55,8 @@ class Sensors(Resource):
         for key, value in filters:
             # Filtros
             # Filtro pot userId
+            if key == "name":
+                sensors = sensors.filter(SensorModel.name.like("%" + value + "%"))
             if key == "userId[lte]":
                 sensors = sensors.filter(SensorModel.userId <= value)
             if key == "userId[gte]":
@@ -93,10 +95,14 @@ class Sensors(Resource):
                 per_page = int(value)
 
         sensors = sensors.paginate(page, per_page, True, 100)
-        return jsonify({"sensors": [sensor.to_json() for sensor in sensors.items],
-                        'total': sensors.total,
-                        'pages': sensors.pages,
-                        'page': page})
+        return jsonify(
+            {
+                "sensors": [sensor.to_json() for sensor in sensors.items],
+                "total": sensors.total,
+                "pages": sensors.pages,
+                "page": page,
+            }
+        )
 
     # Insert resource
     @admin_required

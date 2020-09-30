@@ -1,3 +1,4 @@
+from datetime import datetime
 from flask import request, jsonify
 from flask_restful import Resource
 from flask_jwt_extended import jwt_required, get_jwt_claims, get_jwt_identity
@@ -25,51 +26,63 @@ class VerifiedSeisms(Resource):
     def get(self):
         page = 1
         per_page = 1000
-        seisms = db.session.query(SeismModel).filter(
-            SeismModel.verified == True)
+        filters = request.get_json().items()
+        seisms = db.session.query(SeismModel).filter(SeismModel.verified == True)
 
-        try:
-            filters = request.get_json().items()
-
-            for key, value in filters:
-                # Filtros
-                # Filtros para datetime
-                if key == "datetime":
-                    seisms = seisms.filter(SeismModel.datetime == value)
-                # Filtros para sensor.name
-                if key == "sensor.name":
-                    seisms = seisms.join(SeismModel.sensor).filter(
-                        SensorModel.name == value
+        for key, value in filters:
+            # Filtros
+            # Filtros para datetime
+            if filters["datetimeFrom"] and filters["datetimeTo"]:
+                seisms = seisms.filter(
+                    SeismModel.datetime.between(
+                        filters["datetimeFrom"], filters["datetimeTo"]
                     )
-                # Filtros para magnitude
-                if key == "magnitude":
-                    seisms = seisms.filter(SeismModel.magnitude == value)
+                )
+            if key == "datetime":
+                seisms = seisms.filter(SeismModel.datetime.like("%" + value + "%"))
 
-                # Ordenamiento
-                if key == "sort_by":
-                    # Ordenamiento por datetime
-                    if value == "datetime":
-                        seisms = seisms.order_by(SeismModel.datetime)
-                    if value == "datetime.desc":
-                        seisms = seisms.order_by(SeismModel.datetime.desc())
-                    # Ordenamiento por sensor.name
-                    if value == "sensor.name":
-                        seisms = seisms.join(
-                            SeismModel.sensor).order_by(SeismModel.name)
-                    if value == "sensor.name.desc":
-                        seisms = seisms.join(SeismModel.sensor).order_by(
-                            SeismModel.name.desc())
+            # Filtros para sensor.name
+            if key == "sensor.name":
+                seisms = seisms.join(SeismModel.sensor).filter(
+                    SensorModel.name == value
+                )
+            # Filtros para magnitude
+            if key == "magnitude":
+                seisms = seisms.filter(SeismModel.magnitude == value)
+            # Filtros para depth
+            if key == "depth":
+                seisms = seisms.filter(SeismModel.depth == value)
 
-                # Paginacion
-                if key == "page":
-                    page = value
-                if key == "per_page":
-                    per_page = value
-        except:
-            pass
+            # Ordenamiento
+            if key == "sort_by":
+                # Ordenamiento por datetime
+                if value == "datetime":
+                    seisms = seisms.order_by(SeismModel.datetime)
+                if value == "datetime.desc":
+                    seisms = seisms.order_by(SeismModel.datetime.desc())
+                # Ordenamiento por sensor.name
+                if value == "sensor.name":
+                    seisms = seisms.join(SeismModel.sensor).order_by(SeismModel.name)
+                if value == "sensor.name.desc":
+                    seisms = seisms.join(SeismModel.sensor).order_by(
+                        SeismModel.name.desc()
+                    )
+
+            # Paginacion
+            if key == "page":
+                page = value
+            if key == "per_page":
+                per_page = value
 
         seisms = seisms.paginate(page, per_page, True, 10000)
-        return jsonify({"Verified-seisms": [seism.to_json() for seism in seisms.items]})
+        return jsonify(
+            {
+                "Verified-seisms": [seism.to_json() for seism in seisms.items],
+                "total": seisms.total,
+                "pages": seisms.pages,
+                "page": page,
+            }
+        )
 
 
 class UnverifiedSeism(Resource):
@@ -117,8 +130,7 @@ class UnverifiedSeisms(Resource):
     def get(self):
         page = 1
         per_page = 10
-        seisms = db.session.query(SeismModel).filter(
-            SeismModel.verified == False)
+        seisms = db.session.query(SeismModel).filter(SeismModel.verified == False)
 
         try:
             filters = request.get_json().items()
