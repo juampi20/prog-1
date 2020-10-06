@@ -1,0 +1,8 @@
+pylint
+pylint-flask
+flask
+python-dotenv
+flask_restful
+flask_sqlalchemy
+flask_jwt_extended
+flask_mail
