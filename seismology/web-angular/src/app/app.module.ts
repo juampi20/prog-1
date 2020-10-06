@@ -6,12 +6,14 @@ import { AppComponent } from './app.component';
 import { SensorComponent } from './sensor/sensor.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { UserComponent } from './user/user.component';
+import { SensorDetailComponent } from './sensor/sensor-detail/sensor-detail.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     SensorComponent,
-    UserComponent
+    UserComponent,
+    SensorDetailComponent
   ],
   imports: [
     BrowserModule,

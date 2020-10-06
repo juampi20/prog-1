@@ -20,8 +20,10 @@ const routes: Routes = [
                 path: 'sensor',
                 data: { breadcrumb: 'Sensor' },
                 children: [
-                    path: '',
-                    component: SensorComponent,
+                    {
+                        path: '',
+                        component: SensorComponent,
+                    }
                 ],
             },
             //Rutas de Usuario
