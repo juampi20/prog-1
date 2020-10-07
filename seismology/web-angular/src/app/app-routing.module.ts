@@ -4,45 +4,45 @@ import { SensorComponent } from "./sensor/sensor.component"
 import { UserComponent } from "./user/user.component"
 
 const routes: Routes = [
-    // Home
-    {
-        path: '',
-        redirectTo: '/',
-        pathMatch: 'full',
-        data: { breadcrumb: 'Home' },
-    },
-    // Principal
-    {
-        path: '',
-        data: { breadcrumb: 'Home' },
+  // Home
+  {
+    path: '',
+    redirectTo: '/',
+    pathMatch: 'full',
+    data: { breadcrumb: 'Home' },
+  },
+  // Principal
+  {
+    path: '',
+    data: { breadcrumb: 'Home' },
+    children: [
+      //Rutas de Usuario
+      {
+        path: 'sensor',
+        data: { breadcrumb: 'Sensor' },
         children: [
-            {
-                path: 'sensor',
-                data: { breadcrumb: 'Sensor' },
-                children: [
-                    {
-                        path: '',
-                        component: SensorComponent,
-                    }
-                ],
-            },
-            //Rutas de Usuario
-            /* {
-                path: 'user',
-                data: { breadcrumb: 'User' },
-                children: [
-                    {
-                        path: '',
-                        component: UserComponent,
-                    },
-                ]
-            }, */
+          {
+            path: '',
+            component: SensorComponent,
+          }
         ],
-    },
+      },
+      {
+        path: 'user',
+        data: { breadcrumb: 'User' },
+        children: [
+          {
+            path: '',
+            component: UserComponent,
+          },
+        ]
+      },
+    ],
+  },
 ];
 
 @NgModule({
-    imports: [RouterModule.forRoot(routes)],
-    exports: [RouterModule]
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
 })
 export class AppRoutingModule { }
