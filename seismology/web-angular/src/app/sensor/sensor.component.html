@@ -1,1 +1,21 @@
-<p>sensor works!</p>
+<app-sensor-detail [sensor]="selectedSensor"></app-sensor-detail>
+<table class="table">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Name</th>
+      <th scope="col">Status</th>
+      <th scope="col">Active</th>
+    </tr>
+  </thead>
+  <tbody>
+    <!-- Data binding para recorrer lista -->
+    <tr *ngFor="let sensor of sensors" (click)="onSelect(sensor)">
+      <!-- Interpolación de atributos -->
+      <th scope="row">{{sensor.id}}</th>
+      <td>{{ sensor.name}}</td>
+      <td>{{ sensor.active}}</td>
+      <td>{{ sensor.status}}</td>
+    </tr>
+  </tbody>
+</table>
