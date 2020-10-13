@@ -1,11 +1,11 @@
 from flask_wtf import FlaskForm
 from wtforms import validators  # Importa validaciones
+from wtforms.fields.html5 import DateTimeLocalField as DateTimeField
 from wtforms import (
     BooleanField,
-    DateTimeField,
     FloatField,
     IntegerField,
-    StringField,
+    SelectField,
     SubmitField,
 )
 
@@ -41,24 +41,37 @@ class UnverifiedSeismEditForm(FlaskForm):
 class VerifiedSeismFilterForm(FlaskForm):
     datetimeFrom = DateTimeField(
         label="From year",
+        format="%Y-%m-%dT%H:%M",
         validators=[validators.optional()],
     )
+
     datetimeTo = DateTimeField(
         label="To year",
+        format="%Y-%m-%dT%H:%M",
         validators=[validators.optional()],
     )
+
     depth = IntegerField(
         label="Depth",
         validators=[validators.optional()],
     )
+
     magnitude = FloatField(
         label="Magnitude",
         validators=[validators.optional()],
     )
-    sensorName = StringField(
-        label="Associated sensor",
-        validators=[validators.optional()],
+
+    sensorId = SelectField(
+        label="Sensor Associated",
+        validators=[
+            validators.optional(),
+            validators.InputRequired(
+                message="This field is required",
+            ),
+        ],
+        coerce=int,
     )
+
     submit = SubmitField(
         label="Filter",
     )

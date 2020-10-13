@@ -1,6 +1,6 @@
 import json
 
-from flask import Blueprint, flash, redirect, render_template, url_for, request
+from flask import Blueprint, flash, redirect, render_template, url_for, request, flash
 from flask_breadcrumbs import register_breadcrumb
 from flask_login import login_required
 
@@ -66,7 +66,8 @@ def index():
             pagination=pagination,
         )
     else:
-        redirect(url_for("main.logout"))
+        flash("Error de filtrado", "danger")
+        return redirect(url_for("main.logout"))
 
 
 @sensor.route("/view/<int:id>")

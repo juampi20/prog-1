@@ -1,7 +1,7 @@
 import json
 from datetime import datetime
 
-from flask import Blueprint, redirect, render_template, request, url_for
+from flask import Blueprint, redirect, render_template, request, url_for, flash
 from flask_breadcrumbs import register_breadcrumb
 
 from ..forms.login_form import LoginForm
@@ -15,26 +15,34 @@ verified_seism = Blueprint("verified_seism", __name__, url_prefix="/verified-sei
 @register_breadcrumb(verified_seism, ".", "Verified Seisms")
 def index():
     loginForm = LoginForm()
-    filter = VerifiedSeismFilterForm()
+    filter = VerifiedSeismFilterForm(request.args, meta={"csrf": False})
+
+    r = sendRequest(method="get", url="/sensors-info")
+    filter.sensorId.choices = [
+        (int(sensor["id"]), sensor["name"]) for sensor in json.loads(r.text)["sensors"]
+    ]
+    filter.sensorId.choices.insert(0, [0, "All"])
     data = {}
     # Aplicado de filtros
     # Validar formulario de filtro
-    # FIXME: Not Working
     if filter.validate():
         # Datetime
         if filter.datetimeFrom.data and filter.datetimeTo.data:
             if filter.datetimeFrom.data == filter.datetimeTo.data:
-                data["datetime"] = filter.datetimeTo.data
+                data["datetime"] = filter.datetimeTo.data.strftime("%Y-%m-%d %H:%M")
         if filter.datetimeFrom.data != None:
-            data["datetime"] = filter.datetimeFrom.data
+            data["datetimeFrom"] = filter.datetimeFrom.data.strftime("%Y-%m-%d %H:%M")
         if filter.datetimeTo.data != None:
-            data["datetime"] = filter.datetimeTo.data
-        # SensorName
-        if filter.sensorName.data != None:
-            data["sensorName"] = filter.sensorName.data
+            data["datetimeTo"] = filter.datetimeTo.data.strftime("%Y-%m-%d %H:%M")
+
+        # SensorId
+        if filter.sensorId.data != None and filter.sensorId.data != 0:
+            data["sensorId"] = filter.sensorId.data
+
         # Depth
         if filter.depth.data != None:
             data["depth"] = filter.depth.data
+
         # Magnitude
         if filter.magnitude.data != None:
             data["magnitude"] = filter.magnitude.data
@@ -51,25 +59,29 @@ def index():
             del data["page"]
 
     # Obtener datos de la api para la tabla
-    r = sendRequest(method="get", url="/verified-seisms")
+    print(data)
+    r = sendRequest(method="get", url="/verified-seisms", data=json.dumps(data))
 
-    # if r.status_code == 200:
-    # Cargar sismos verificados
-    verified_seisms = json.loads(r.text)["Verified-seisms"]
-    # Cargar datos de paginacion
-    pagination = {}
-    pagination["total"] = json.loads(r.text)["total"]
-    pagination["pages"] = json.loads(r.text)["pages"]
-    pagination["current_page"] = json.loads(r.text)["page"]
-    title = "Verified Seisms List"
-    return render_template(
-        "verified-seisms.html",
-        title=title,
-        verified_seisms=verified_seisms,
-        loginForm=loginForm,
-        filter=filter,
-        pagination=pagination,
-    )
+    if r.status_code == 200:
+        # Cargar sismos verificados
+        verified_seisms = json.loads(r.text)["Verified-seisms"]
+        # Cargar datos de paginacion
+        pagination = {}
+        pagination["total"] = json.loads(r.text)["total"]
+        pagination["pages"] = json.loads(r.text)["pages"]
+        pagination["current_page"] = json.loads(r.text)["page"]
+        title = "Verified Seisms List"
+        return render_template(
+            "verified-seisms.html",
+            title=title,
+            verified_seisms=verified_seisms,
+            loginForm=loginForm,
+            filter=filter,
+            pagination=pagination,
+        )
+    else:
+        flash("Error de filtrado", "danger")
+        return redirect(url_for("verified_seism.index"))
 
 
 @verified_seism.route("/view/<int:id>")

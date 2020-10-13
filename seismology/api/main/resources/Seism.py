@@ -28,24 +28,20 @@ class VerifiedSeisms(Resource):
         per_page = 1000
         filters = request.get_json().items()
         seisms = db.session.query(SeismModel).filter(SeismModel.verified == True)
-
         for key, value in filters:
             # Filtros
             # Filtros para datetime
-            if filters["datetimeFrom"] and filters["datetimeTo"]:
-                seisms = seisms.filter(
-                    SeismModel.datetime.between(
-                        filters["datetimeFrom"], filters["datetimeTo"]
-                    )
-                )
-            if key == "datetime":
-                seisms = seisms.filter(SeismModel.datetime.like("%" + value + "%"))
+            if "datetime" in filters:
+                seisms = seisms.filter(SeismModel.datetime == value)
+            if key == "datetimeFrom":
+                seisms = seisms.filter(SeismModel.datetime >= value)
+
+            if key == "datetimeTo":
+                seisms = seisms.filter(SeismModel.datetime <= value)
 
             # Filtros para sensor.name
-            if key == "sensor.name":
-                seisms = seisms.join(SeismModel.sensor).filter(
-                    SensorModel.name == value
-                )
+            if key == "sensorId":
+                seisms = seisms.filter(SeismModel.sensorId == value)
             # Filtros para magnitude
             if key == "magnitude":
                 seisms = seisms.filter(SeismModel.magnitude == value)
@@ -171,7 +167,7 @@ class UnverifiedSeisms(Resource):
             sensorlist.append(sensor.id)
         if sensorlist:
             value_sensor = {
-                "datetime": time.strftime(r"%Y-%m-%d %H:%M:%S", time.localtime()),
+                "datetime": time.strftime(r"%Y-%m-%d %H:%M", time.localtime()),
                 "depth": randint(5, 250),
                 "magnitude": round(uniform(2.0, 5.5), 1),
                 "latitude": uniform(-180, 180),
