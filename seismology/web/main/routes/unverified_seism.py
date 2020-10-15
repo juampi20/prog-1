@@ -1,10 +1,10 @@
 import json
 
-from flask import Blueprint, flash, redirect, render_template, url_for
+from flask import Blueprint, flash, redirect, render_template, url_for, request, flash
 from flask_breadcrumbs import register_breadcrumb
 from flask_login import login_required
 
-from ..forms.seism_form import UnverifiedSeismEditForm
+from ..forms.seism_form import UnverifiedSeismEditForm, SeismFilterForm
 from ..utilities.functions import sendRequest
 
 unverified_seism = Blueprint(
@@ -16,12 +16,76 @@ unverified_seism = Blueprint(
 @login_required
 @register_breadcrumb(unverified_seism, ".", "Unverified Seisms")
 def index():
-    r = sendRequest(method="get", url="/unverified-seisms", auth=True)
-    unverified_seisms = json.loads(r.text)["Unverified-seisms"]
-    title = "Unverified Seisms List"
-    return render_template(
-        "unverified-seisms.html", title=title, unverified_seisms=unverified_seisms
+    filter = SeismFilterForm(request.args, meta={"csrf": False})
+
+    r = sendRequest(method="get", url="/sensors-info")
+    filter.sensorId.choices = [
+        (int(sensor["id"]), sensor["name"]) for sensor in json.loads(r.text)["sensors"]
+    ]
+    filter.sensorId.choices.insert(0, [0, "All"])
+    data = {}
+    # Aplicado de filtros
+    # Validar formulario de filtro
+    if filter.validate():
+        # Datetime
+        if filter.datetimeFrom.data and filter.datetimeTo.data:
+            if filter.datetimeFrom.data == filter.datetimeTo.data:
+                data["datetime"] = filter.datetimeTo.data.strftime("%Y-%m-%d %H:%M")
+        if filter.datetimeFrom.data != None:
+            data["datetimeFrom"] = filter.datetimeFrom.data.strftime("%Y-%m-%d %H:%M")
+        if filter.datetimeTo.data != None:
+            data["datetimeTo"] = filter.datetimeTo.data.strftime("%Y-%m-%d %H:%M")
+
+        # SensorId
+        if filter.sensorId.data != None and filter.sensorId.data != 0:
+            data["sensorId"] = filter.sensorId.data
+
+        # Depth
+        if filter.depth_min.data != None:
+            data["depth_min"] = filter.depth_min.data
+        if filter.depth_max.data != None:
+            data["depth_max"] = filter.depth_max.data
+
+        # Magnitude
+        if filter.magnitude_min.data != None:
+            data["magnitude_min"] = filter.magnitude_min.data
+        if filter.magnitude_max.data != None:
+            data["magnitude_max"] = filter.magnitude_max.data
+
+    # Ordenamiento
+    if "sort_by" in request.args:
+        data["sort_by"] = request.args.get("sort_by", "")
+
+    # Numero de pagina
+    if "page" in request.args:
+        data["page"] = request.args.get("page", "")
+    else:
+        if "page" in data:
+            del data["page"]
+
+    # Obtener datos de la api para la tabla
+    r = sendRequest(
+        method="get", url="/unverified-seisms", data=json.dumps(data), auth=True
     )
+
+    if r.status_code == 200:
+        unverified_seisms = json.loads(r.text)["Unverified-seisms"]
+        # Cargar datos de paginacion
+        pagination = {}
+        pagination["total"] = json.loads(r.text)["total"]
+        pagination["pages"] = json.loads(r.text)["pages"]
+        pagination["current_page"] = json.loads(r.text)["page"]
+        title = "Unverified Seisms List"
+        return render_template(
+            "unverified-seisms.html",
+            title=title,
+            unverified_seisms=unverified_seisms,
+            filter=filter,
+            pagination=pagination,
+        )
+    else:
+        flash("Error de filtrado", "danger")
+        return redirect(url_for("unverified_seism.index"))
 
 
 @unverified_seism.route("/view/<int:id>")

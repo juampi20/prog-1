@@ -9,38 +9,58 @@
 <!-- Contenido -->
 
 <div class="container-fluid">
-  <div class="row justify-content-center">
-    <div class="col-md-2 d-none d-md-block"></div>
-    <div class="col-md-8">
+  <div class="row">
 
-      <h2 class="text-uppercase text-center text-white mb-0">{{title}}</h2>
-      <hr class="bg-white mb-5" />
+    <!-- Sidebar -->
+    <div class="col-md-2">
+      <div class="collapse" id="filter">
+        <div class="container">
 
-      <form method="GET" action="{{url_for('verified_seism.index')}}">
-        <div class="form-row">
-          <div class="form-group col-md-3">
-            {{show_field(filter.sensorId, class='form-control')}}
-          </div>
-          <div class="form-group col-md-2">
-            {{show_field(filter.depth, class='form-control')}}
-          </div>
-          <div class="form-group col-md-2">
-            {{show_field(filter.magnitude, class='form-control')}}
-          </div>
-          <div class="form-group col-md-3">
-            {{show_field(filter.datetimeFrom, class='form-control')}}
-          </div>
-          <div class="form-group col-md-3">
-            {{show_field(filter.datetimeTo, class='form-control')}}
-          </div>
-          <div class="form-group col-md-2">
-            {{show_submit(filter.submit, class='btn btn-success')}}
-          </div>
+          <h3>Filters</h3>
+
+          <form method="GET" action="{{url_for('verified_seism.index')}}">
+
+            <div class="form-row">
+              {{show_field(filter.sensorId, class='form-control')}}
+            </div>
+            <br>
+            <div class="form-row">
+              {{show_field(filter.datetimeFrom, class='form-control')}}
+              {{show_field(filter.datetimeTo, class='form-control')}}
+            </div>
+            <br>
+            <div class="form-row">
+              {{show_field(filter.depth_min, class='form-control')}}
+              {{show_field(filter.depth_max, class='form-control')}}
+            </div>
+            <br>
+            <div class="form-row">
+              {{show_field(filter.magnitude_min, class='form-control')}}
+              {{show_field(filter.magnitude_max, class='form-control')}}
+            </div>
+            <br>
+            <div class="form-row">
+              {{show_submit(filter.submit, class='btn btn-success')}}
+            </div>
+
+          </form>
+
         </div>
-      </form>
+      </div>
+    </div>
 
-      <div class="row">
-        <div class="col-md-6">
+
+    <div class="col">
+      <h2 class="text-uppercase text-center text-white mb-0">{{title}}</h2>
+      <hr class="bg-white" />
+
+      <div class="row my-3">
+        <div class="col-auto">
+          <button class="btn btn-success" type="button" data-toggle="collapse" data-target="#filter">
+            Toggle Filters
+          </button>
+        </div>
+        <div class="col-auto my-auto">
           Total: {{pagination.total}}
         </div>
       </div>
@@ -68,28 +88,28 @@
         </table>
       </div>
 
+      <!-- Pagination -->
+      <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+          <li class="page-item">
+            <a class="page-link" href="#" aria-label="Previous">
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+          <li class="page-item"><a class="page-link" href="#">1</a></li>
+          <li class="page-item"><a class="page-link" href="#">2</a></li>
+          <li class="page-item"><a class="page-link" href="#">3</a></li>
+          <li class="page-item">
+            <a class="page-link" href="#" aria-label="Next">
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
     </div>
+
     <div class="col-md-2 d-none d-md-block"></div>
   </div>
-
-  <!-- Pagination -->
-  <nav aria-label="Page navigation example">
-    <ul class="pagination justify-content-center">
-      <li class="page-item">
-        <a class="page-link" href="#" aria-label="Previous">
-          <span aria-hidden="true">&laquo;</span>
-        </a>
-      </li>
-      <li class="page-item"><a class="page-link" href="#">1</a></li>
-      <li class="page-item"><a class="page-link" href="#">2</a></li>
-      <li class="page-item"><a class="page-link" href="#">3</a></li>
-      <li class="page-item">
-        <a class="page-link" href="#" aria-label="Next">
-          <span aria-hidden="true">&raquo;</span>
-        </a>
-      </li>
-    </ul>
-  </nav>
 </div>
 
 <!-- Fin Contenido -->

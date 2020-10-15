@@ -9,11 +9,60 @@
 <!-- Contenido -->
 
 <div class="container-fluid">
-  <div class="row justify-content-center">
-    <div class="col-md-2 d-none d-md-block"></div>
-    <div class="col-md-8">
+  <div class="row">
+
+    <!-- Sidebar -->
+    <div class="col-md-2">
+      <nav class="collapse" id="filter">
+        <div class="container">
+
+          <div class="header">
+            <h3>Filters</h3>
+          </div>
+
+          <form method="GET" action="{{url_for('unverified_seism.index')}}">
+            <div class="form-row">
+              {{show_field(filter.sensorId, class='form-control')}}
+            </div>
+            <br>
+            <div class="form-row">
+              {{show_field(filter.datetimeFrom, class='form-control')}}
+              {{show_field(filter.datetimeTo, class='form-control')}}
+            </div>
+            <br>
+            <div class="form-row">
+              {{show_field(filter.depth_min, class='form-control')}}
+              {{show_field(filter.depth_max, class='form-control')}}
+            </div>
+            <br>
+            <div class="form-row">
+              {{show_field(filter.magnitude_min, class='form-control')}}
+              {{show_field(filter.magnitude_max, class='form-control')}}
+            </div>
+            <br>
+            <div class="form-row">
+              {{show_submit(filter.submit, class='btn btn-success')}}
+            </div>
+          </form>
+
+        </div>
+      </nav>
+    </div>
+
+    <div class="col">
       <h2 class="text-uppercase text-center text-white mb-0">{{title}}</h2>
       <hr class="bg-white mb-5" />
+
+      <div class="row my-3">
+        <div class="col-auto">
+          <button class="btn btn-success" type="button" data-toggle="collapse" data-target="#filter">
+            Toggle Filters
+          </button>
+        </div>
+        <div class="col-auto my-auto">
+          Total: {{pagination.total}}
+        </div>
+      </div>
 
       <!-- Tabla -->
       <div class="table-responsive text-center">
@@ -36,28 +85,30 @@
           </tbody>
         </table>
       </div>
+
+      <!-- Pagination -->
+      <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+          <li class="page-item">
+            <a class="page-link" href="#" aria-label="Previous">
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+          <li class="page-item"><a class="page-link" href="#">1</a></li>
+          <li class="page-item"><a class="page-link" href="#">2</a></li>
+          <li class="page-item"><a class="page-link" href="#">3</a></li>
+          <li class="page-item">
+            <a class="page-link" href="#" aria-label="Next">
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
     </div>
+
+
     <div class="col-md-2 d-none d-md-block"></div>
   </div>
-
-  <!-- Pagination -->
-  <nav aria-label="Page navigation example">
-    <ul class="pagination justify-content-center">
-      <li class="page-item">
-        <a class="page-link" href="#" aria-label="Previous">
-          <span aria-hidden="true">&laquo;</span>
-        </a>
-      </li>
-      <li class="page-item"><a class="page-link" href="#">1</a></li>
-      <li class="page-item"><a class="page-link" href="#">2</a></li>
-      <li class="page-item"><a class="page-link" href="#">3</a></li>
-      <li class="page-item">
-        <a class="page-link" href="#" aria-label="Next">
-          <span aria-hidden="true">&raquo;</span>
-        </a>
-      </li>
-    </ul>
-  </nav>
 </div>
 
 <!-- Fin Contenido -->

@@ -5,7 +5,7 @@ from flask import Blueprint, redirect, render_template, request, url_for, flash
 from flask_breadcrumbs import register_breadcrumb
 
 from ..forms.login_form import LoginForm
-from ..forms.seism_form import VerifiedSeismFilterForm
+from ..forms.seism_form import SeismFilterForm
 from ..utilities.functions import sendRequest
 
 verified_seism = Blueprint("verified_seism", __name__, url_prefix="/verified-seism")
@@ -15,7 +15,7 @@ verified_seism = Blueprint("verified_seism", __name__, url_prefix="/verified-sei
 @register_breadcrumb(verified_seism, ".", "Verified Seisms")
 def index():
     loginForm = LoginForm()
-    filter = VerifiedSeismFilterForm(request.args, meta={"csrf": False})
+    filter = SeismFilterForm(request.args, meta={"csrf": False})
 
     r = sendRequest(method="get", url="/sensors-info")
     filter.sensorId.choices = [
@@ -40,12 +40,16 @@ def index():
             data["sensorId"] = filter.sensorId.data
 
         # Depth
-        if filter.depth.data != None:
-            data["depth"] = filter.depth.data
+        if filter.depth_min.data != None:
+            data["depth_min"] = filter.depth_min.data
+        if filter.depth_max.data != None:
+            data["depth_max"] = filter.depth_max.data
 
         # Magnitude
-        if filter.magnitude.data != None:
-            data["magnitude"] = filter.magnitude.data
+        if filter.magnitude_min.data != None:
+            data["magnitude_min"] = filter.magnitude_min.data
+        if filter.magnitude_max.data != None:
+            data["magnitude_max"] = filter.magnitude_max.data
 
     # Ordenamiento
     if "sort_by" in request.args:
@@ -59,7 +63,6 @@ def index():
             del data["page"]
 
     # Obtener datos de la api para la tabla
-    print(data)
     r = sendRequest(method="get", url="/verified-seisms", data=json.dumps(data))
 
     if r.status_code == 200:

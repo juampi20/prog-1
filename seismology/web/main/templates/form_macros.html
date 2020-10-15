@@ -1,46 +1,47 @@
 <!-- Macro que se encarga de mostrar los errores de validación -->
 {% macro show_error(field) %}
-    {% if field.errors %} <!--Si existen errores -->
-        <div class="alert alert-danger my-1" role="alert">
-            {% for error in field.errors %} <!--Recorrer errrores-->
-                {{ error }} <br> <!--Mostrar error -->
-            {% endfor %}
-        </div>
-    {% endif %}
+{% if field.errors %}
+<!--Si existen errores -->
+<div class="alert alert-danger my-1" role="alert">
+  {% for error in field.errors %}
+  <!--Recorrer errrores-->
+  {{ error }} <br>
+  <!--Mostrar error -->
+  {% endfor %}
+</div>
+{% endif %}
 {% endmacro %}
 
 <!-- Macro que se encarga de mostrar los campos del formulario -->
 {% macro show_field(field) %}
-    {{ field.label }} <!-- Mostrar etiqueta -->
-    {{ field(**kwargs) | safe }} <!-- Mostrar campo -->
-    {{ show_error(field) }} <!-- Llamar a macro que muestra el error -->
+{{ field.label }}
+<!-- Mostrar etiqueta -->
+{{ field(**kwargs) | safe }}
+<!-- Mostrar campo -->
+{{ show_error(field) }}
+<!-- Llamar a macro que muestra el error -->
 {% endmacro %}
 
-<!-- Macro que se encarga de mostrar los campos del Login -->
+<!-- Macro que se encarga de mostrar los campos sin label -->
 {% macro show_placeholder(field) %}
-    <!-- {{ field.label }} Mostrar etiqueta -->
-    {{ field(placeholder=field.label.text, **kwargs) | safe }} <!-- Mostrar campo -->
-    {{ show_error(field) }} <!-- Llamar a macro que muestra el error -->
+<!-- {{ field.label }} Mostrar etiqueta -->
+{{ field(placeholder=field.label.text, **kwargs) | safe }}
+<!-- Mostrar campo -->
+{{ show_error(field) }}
+<!-- Llamar a macro que muestra el error -->
 {% endmacro %}
 
 <!-- Macro que se encarga de mostrar los campos tipo submit formulario -->
 {% macro show_submit(field) %}
-    {{ field(**kwargs) | safe }} <!-- Mostrar campo -->
+{{ field(**kwargs) | safe }}
+<!-- Mostrar campo -->
 {% endmacro %}
 
-{# Renders checkbox fields since they are represented differently in bootstrap
-    Params:
-        field - WTForm field (there are no check, but you should put here only BooleanField.
-        kwargs - pass any arguments you want in order to put them into the html attributes.
-        There are few exceptions: for - for_, class - class_, class__ - class_
-
-    Example usage:
-        {{ macros.show_checkbox(form.remember_me) }}
- #}
+<!-- Macro que se encarga de mostrar los campos de checkbox -->
 {% macro show_checkbox(field) %}
-    <div class="checkbox">
-        <label>
-            {{ field(type='checkbox', **kwargs) }} {{ field.label }}
-        </label>
-    </div>
+<div class="checkbox">
+  <label>
+    {{ field.label }} {{ field(type='checkbox', **kwargs) }}
+  </label>
+</div>
 {% endmacro %}

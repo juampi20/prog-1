@@ -38,26 +38,36 @@ class UnverifiedSeismEditForm(FlaskForm):
     submit = SubmitField(label="Send")
 
 
-class VerifiedSeismFilterForm(FlaskForm):
+class SeismFilterForm(FlaskForm):
     datetimeFrom = DateTimeField(
-        label="From year",
+        label="From Datetime",
         format="%Y-%m-%dT%H:%M",
         validators=[validators.optional()],
     )
 
     datetimeTo = DateTimeField(
-        label="To year",
+        label="To Datetime",
         format="%Y-%m-%dT%H:%M",
         validators=[validators.optional()],
     )
 
-    depth = IntegerField(
-        label="Depth",
+    depth_min = IntegerField(
+        label="Depth Min",
         validators=[validators.optional()],
     )
 
-    magnitude = FloatField(
-        label="Magnitude",
+    depth_max = IntegerField(
+        label="Depth Max",
+        validators=[validators.optional()],
+    )
+
+    magnitude_min = FloatField(
+        label="Magnitude Min",
+        validators=[validators.optional()],
+    )
+
+    magnitude_max = FloatField(
+        label="Magnitude Max",
         validators=[validators.optional()],
     )
 
