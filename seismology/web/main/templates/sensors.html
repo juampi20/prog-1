@@ -17,24 +17,23 @@
       <div class="collapse" id="filter">
         <div class="container">
 
-          <h3>Filters</h3>
+          <h3 class="text-uppercase text-center text-white">Filters</h3>
+          <hr class="bg-white" />
 
           <form method="GET" action="{{url_for('sensor.index')}}">
 
             <div class="form-row">
-              {{show_placeholder(filter.name, class='form-control')}}
+              {{show_field(filter.name, class='form-control')}}
             </div>
             <br>
             <div class="form-row">
               {{show_checkbox(filter.status)}}
             </div>
-            <br>
             <div class="form-row">
               {{show_checkbox(filter.active)}}
             </div>
-            <br>
             <div class="form-row">
-              {{show_placeholder(filter.userId, class='form-control')}}
+              {{show_field(filter.userId, class='form-control')}}
             </div>
             <br>
             <div class="form-row">
@@ -49,7 +48,7 @@
 
     <div class="col">
 
-      <h2 class="text-uppercase text-center text-white mb-0">{{title}}</h2>
+      <h2 class="text-uppercase text-center text-white">{{title}}</h2>
       <hr class="bg-white" />
 
       <div class="row my-3">
@@ -143,29 +142,30 @@
           {% if pagination.current_page != 1 %}
           <li class="page-item">
             <a class="page-link" href="{{ url_for('sensor.index',
-        page = (pagination.current_page-1),
-        name = request.args.name,
-        status = request.args.status,
-        active = request.args.active,
-        userId = request.args.userId )}}" aria-label="Previous">
+            page = (pagination.current_page-1),
+            name = request.args.name,
+            status = request.args.status,
+            active = request.args.active,
+            userId = request.args.userId )}}" aria-label="Previous">
               <span aria-hidden="true">&laquo;</span>
             </a>
           </li>
           {% else %}
           <li class="page-item disabled">
             <a href="#" class="page-link" tabindex="-1" aria-disabled="true" aria-label="Previous">
-              <span aria-hidden="true">&laquo;</span></a>
+              <span aria-hidden="true">&laquo;</span>
+            </a>
           </li>
           {% endif %}
           {% for n in range(1, pagination.pages+1) %}
           {% if n != pagination.current_page %}
           <li class="page-item">
             <a class="page-link" href="{{ url_for('sensor.index',
-        page = n,
-        name = request.args.name,
-        status = request.args.status,
-        active = request.args.active,
-        userId = request.args.userId )}}">{{n}}</a>
+            page = n,
+            name = request.args.name,
+            status = request.args.status,
+            active = request.args.active,
+            userId = request.args.userId )}}">{{n}}</a>
           </li>
           {% else %}
           <li class="page-item disabled">
@@ -176,11 +176,11 @@
           {% if pagination.current_page != pagination.pages %}
           <li class="page-item">
             <a class="page-link" href="{{ url_for('sensor.index',
-        page = (pagination.current_page+1),
-        name = request.args.name,
-        status = request.args.status,
-        active = request.args.active,
-        userId = request.args.userId )}}" aria-label="Next">
+            page = (pagination.current_page+1),
+            name = request.args.name,
+            status = request.args.status,
+            active = request.args.active,
+            userId = request.args.userId )}}" aria-label="Next">
               <span aria-hidden="true">&raquo;</span>
             </a>
           </li>

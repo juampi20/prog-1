@@ -62,11 +62,11 @@ class VerifiedSeisms(Resource):
                 # Ordenamiento por sensor.name
                 if value == "sensor.name":
                     seisms = seisms.join(SeismModel.sensor).order_by(
-                        SeismModel.name.asc()
+                        SensorModel.name.asc()
                     )
                 if value == "sensor.name.desc":
                     seisms = seisms.join(SeismModel.sensor).order_by(
-                        SeismModel.name.desc()
+                        SensorModel.name.desc()
                     )
                 # Ordenamiento por magnitude
                 if value == "magnitude":
@@ -175,11 +175,11 @@ class UnverifiedSeisms(Resource):
                 # Ordenamiento por sensor.name
                 if value == "sensor.name":
                     seisms = seisms.join(SeismModel.sensor).order_by(
-                        SeismModel.name.asc()
+                        SensorModel.name.asc()
                     )
                 if value == "sensor.name.desc":
                     seisms = seisms.join(SeismModel.sensor).order_by(
-                        SeismModel.name.desc()
+                        SensorModel.name.desc()
                     )
                 # Ordenamiento por magnitude
                 if value == "magnitude":
