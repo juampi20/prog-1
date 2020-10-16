@@ -58,6 +58,9 @@
             Toggle Filters
           </button>
         </div>
+        <div class="col-auto">
+          <a class="btn btn-success" href="{{ url_for('unverified_seism.create') }}" role="button">Create</a>
+        </div>
         <div class="col-auto my-auto">
           Total: {{pagination.total}}
         </div>
@@ -188,6 +191,7 @@
           {% if pagination.current_page != 1 %}
           <li class="page-item">
             <a class="page-link" href="{{ url_for('unverified_seism.index',
+            page = (pagination.current_page-1),
             datetime = request.args.datetime,
             datetimeFrom = request.args.datetimeFrom,
             datetimeTo = request.args.datetimeTo,
@@ -210,6 +214,7 @@
           {% if n != pagination.current_page %}
           <li class="page-item">
             <a class="page-link" href="{{ url_for('unverified_seism.index',
+            page = n,
             datetime = request.args.datetime,
             datetimeFrom = request.args.datetimeFrom,
             datetimeTo = request.args.datetimeTo,
@@ -219,11 +224,16 @@
             magnitude_min = request.args.magnitude_min,
             sensorId = request.args.sensorId )}}">{{n}}</a>
           </li>
+          {% else %}
+          <li class="page-item disabled">
+            <a class="page-link" href="#" tabindex="+1" aria-disabled="true">{{n}}</a>
+          </li>
           {% endif %}
           {% endfor %}
           {% if pagination.current_page != pagination.pages %}
           <li class="page-item">
             <a class="page-link" href="{{ url_for('unverified_seism.index',
+            page = (pagination.current_page+1),
             datetime = request.args.datetime,
             datetimeFrom = request.args.datetimeFrom,
             datetimeTo = request.args.datetimeTo,

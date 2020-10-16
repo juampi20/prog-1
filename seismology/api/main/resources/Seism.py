@@ -81,9 +81,9 @@ class VerifiedSeisms(Resource):
 
             # Paginacion
             if key == "page":
-                page = value
+                page = int(value)
             if key == "per_page":
-                per_page = value
+                per_page = int(value)
 
         seisms = seisms.paginate(page, per_page, True, 10000)
         return jsonify(
@@ -194,11 +194,11 @@ class UnverifiedSeisms(Resource):
 
             # Paginacion
             if key == "page":
-                page = value
+                page = int(value)
             if key == "per_page":
-                per_page = value
+                per_page = int(value)
 
-        seisms = seisms.paginate(page, per_page, True, 50)
+        seisms = seisms.paginate(page, per_page, True, 10)
         return jsonify(
             {
                 "Unverified-seisms": [seism.to_json() for seism in seisms.items],
@@ -212,12 +212,10 @@ class UnverifiedSeisms(Resource):
     @jwt_required
     def post(self):
         sensors = db.session.query(SensorModel).all()
-        sensorlist = []
-        for sensor in sensors:
-            sensorlist.append(sensor.id)
+        sensorlist = [(int(sensor.id)) for sensor in sensors]
         if sensorlist:
             value_sensor = {
-                "datetime": time.strftime(r"%Y-%m-%d %H:%M", time.localtime()),
+                "datetime": time.strftime(r"%Y-%m-%d %H:%M:%S", time.localtime()),
                 "depth": randint(5, 250),
                 "magnitude": round(uniform(2.0, 5.5), 1),
                 "latitude": uniform(-180, 180),

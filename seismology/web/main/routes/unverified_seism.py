@@ -4,6 +4,7 @@ from flask import Blueprint, flash, redirect, render_template, url_for, request,
 from flask_breadcrumbs import register_breadcrumb
 from flask_login import login_required
 
+from .auth import admin_required
 from ..forms.seism_form import UnverifiedSeismEditForm, SeismFilterForm
 from ..utilities.functions import sendRequest
 
@@ -59,9 +60,6 @@ def index():
     # Numero de pagina
     if "page" in request.args:
         data["page"] = request.args.get("page", "")
-    else:
-        if "page" in data:
-            del data["page"]
 
     # Obtener datos de la api para la tabla
     r = sendRequest(
@@ -139,3 +137,12 @@ def delete(id):
     r = sendRequest(method="delete", url="/unverified-seism/" + str(id), auth=True)
     flash("Unverified Seism deleted", "danger")
     return redirect(url_for("unverified_seism.index"))
+
+
+@unverified_seism.route("/create", methods=["GET", "POST"])
+@login_required
+@admin_required
+@register_breadcrumb(unverified_seism, ".create", "Create Sensor")
+def create():
+    r = sendRequest(method="post", url="/unverified-seisms", auth=True)
+    return redirect(url_for("unverified_seism.index"))  # Redirecciona a la lista
