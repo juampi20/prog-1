@@ -47,6 +47,9 @@ def index():
     # Numero de pagina
     if "page" in request.args:
         data["page"] = request.args.get("page", "")
+    else:
+        if "page" in data:
+            del data["page"]
 
     # Obtener datos de la api
     r = sendRequest(method="get", url="/sensors", data=json.dumps(data), auth=True)

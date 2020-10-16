@@ -60,6 +60,9 @@ def index():
     # Numero de pagina
     if "page" in request.args:
         data["page"] = request.args.get("page", "")
+    else:
+        if "page" in data:
+            del data["page"]
 
     # Obtener datos de la api para la tabla
     r = sendRequest(
