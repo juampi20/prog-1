@@ -116,8 +116,8 @@ def create():
 @register_breadcrumb(sensor, ".edit", "Edit Sensor")
 def edit(id):
     form = SensorEditForm()
-    req = sendRequest(method="get", url="/users", auth=True)
-    users = [(int(item["id"]), item["email"]) for item in json.loads(req.text)["Users"]]
+    req = sendRequest(method="get", url="/users-info")
+    users = [(int(user["id"]), user["email"]) for user in json.loads(req.text)["Users"]]
     form.userId.choices = users
     form.userId.choices.insert(0, [0, "Select one user"])
     if not form.is_submitted():

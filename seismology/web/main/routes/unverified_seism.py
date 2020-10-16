@@ -148,4 +148,5 @@ def delete(id):
 @register_breadcrumb(unverified_seism, ".create", "Create Sensor")
 def create():
     r = sendRequest(method="post", url="/unverified-seisms", auth=True)
+    flash("Unverified Seism created", "success")
     return redirect(url_for("unverified_seism.index"))  # Redirecciona a la lista

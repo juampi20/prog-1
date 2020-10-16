@@ -20,7 +20,7 @@
         <div class="table-responsive text-center">
           <table class="table table-dark table-striped table-hover table-bordered">
             <caption>
-              <a class="btn btn-success" href="{{ url_for("user.create") }}" role="button">Create</a>
+              <a class="btn btn-success" href="{{ url_for('user.create') }}" role="button">Create</a>
             </caption>
             <thead>
               <tr>
@@ -38,57 +38,55 @@
 
             </tbody>
           </table>
+
+          <!-- Pagination -->
+          <nav aria-label="Pagination">
+            <ul class="pagination justify-content-center">
+              {% if pagination.current_page != 1 %}
+              <li class="page-item">
+                <a class="page-link" href="{{ url_for('user.index', page = (pagination.current_page-1))}}"
+                  aria-label="Previous">
+                  <span aria-hidden="true">&laquo;</span>
+                </a>
+              </li>
+              {% else %}
+              <li class="page-item disabled">
+                <a href="#" class="page-link" tabindex="-1" aria-disabled="true" aria-label="Previous">
+                  <span aria-hidden="true">&laquo;</span>
+                </a>
+              </li>
+              {% endif %}
+              {% for n in range(1, pagination.pages+1) %}
+              {% if n != pagination.current_page %}
+              <li class="page-item">
+                <a class="page-link" href="{{ url_for('user.index', page = n) }}">{{n}}</a>
+              </li>
+              {% else %}
+              <li class="page-item disabled">
+                <a class="page-link" href="#" tabindex="+1" aria-disabled="true">{{n}}</a>
+              </li>
+              {% endif %}
+              {% endfor %}
+              {% if pagination.current_page != pagination.pages %}
+              <li class="page-item">
+                <a class="page-link" href="{{ url_for('user.index', page = (pagination.current_page+1))}}"
+                  aria-label="Next">
+                  <span aria-hidden="true">&raquo;</span>
+                </a>
+              </li>
+              {% else %}
+              <li class="page-item disabled">
+                <a href="#" class="page-link" tabindex="-1" aria-disabled="true" aria-label="Next">
+                  <span aria-hidden="true">&raquo;</span></a>
+              </li>
+              {% endif %}
+            </ul>
+          </nav>
+
         </div>
 
       </div>
       <div class="col-md-2 d-none d-md-block"></div>
-
-      <!-- Pagination -->
-      <!-- Pagination -->
-      <nav aria-label="Pagination">
-        <ul class="pagination justify-content-center">
-          {% if pagination.current_page != 1 %}
-          <li class="page-item">
-            <a class="page-link" href="{{ url_for('user.index',
-            page = (pagination.current_page-1))}}" aria-label="Previous">
-              <span aria-hidden="true">&laquo;</span>
-            </a>
-          </li>
-          {% else %}
-          <li class="page-item disabled">
-            <a href="#" class="page-link" tabindex="-1" aria-disabled="true" aria-label="Previous">
-              <span aria-hidden="true">&laquo;</span>
-            </a>
-          </li>
-          {% endif %}
-          {% for n in range(1, pagination.pages+1) %}
-          {% if n != pagination.current_page %}
-          <li class="page-item">
-            <a class="page-link" href="{{ url_for('user.index',
-            page = n) }}">{{n}}</a>
-          </li>
-          {% else %}
-          <li class="page-item disabled">
-            <a class="page-link" href="#" tabindex="+1" aria-disabled="true">{{n}}</a>
-          </li>
-          {% endif %}
-          {% endfor %}
-          {% if pagination.current_page != pagination.pages %}
-          <li class="page-item">
-            <a class="page-link" href="{{ url_for('user.index',
-            page = (pagination.current_page+1))}}" aria-label="Next">
-              <span aria-hidden="true">&raquo;</span>
-            </a>
-          </li>
-          {% else %}
-          <li class="page-item disabled">
-            <a href="#" class="page-link" tabindex="-1" aria-disabled="true" aria-label="Next">
-              <span aria-hidden="true">&raquo;</span></a>
-          </li>
-          {% endif %}
-        </ul>
-      </nav>
-
     </div>
   </div>
 </main>
