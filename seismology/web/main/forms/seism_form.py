@@ -73,12 +73,7 @@ class SeismFilterForm(FlaskForm):
 
     sensorId = SelectField(
         label="Sensor Associated",
-        validators=[
-            validators.optional(),
-            validators.InputRequired(
-                message="This field is required",
-            ),
-        ],
+        validators=[validators.optional()],
         coerce=int,
     )
 
