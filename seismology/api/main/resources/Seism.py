@@ -25,7 +25,7 @@ class VerifiedSeisms(Resource):
     # Get resources list
     def get(self):
         page = 1
-        per_page = 1000
+        per_page = 10
         filters = request.get_json().items()
         seisms = db.session.query(SeismModel).filter(SeismModel.verified == True)
         for key, value in filters:

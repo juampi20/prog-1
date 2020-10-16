@@ -20,7 +20,7 @@ def index():
     # Cargar parametros de la url en el formulario
     filter = SensorFilterForm(request.args, meta={"csrf": False})
     # Obtener usuarios
-    r = sendRequest(method="get", url="/users", auth=True)
+    r = sendRequest(method="get", url="/users-info")
 
     # Cargar usuarios en el formulario
     filter.userId.choices = [
@@ -70,7 +70,7 @@ def index():
         )
     else:
         flash("Error de filtrado", "danger")
-        return redirect(url_for("main.logout"))
+        return redirect(url_for("sensor.index"))
 
 
 @sensor.route("/view/<int:id>")

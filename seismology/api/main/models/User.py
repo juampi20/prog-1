@@ -44,6 +44,14 @@ class User(db.Model):
         }
         return user_json
 
+    # Convert object to json
+    def to_json_public(self):
+        user_json = {
+            "id": self.id,
+            "email": str(self.email),
+        }
+        return user_json
+
     # Convert json to object
     def from_json(user_json):
         id = user_json.get("id")

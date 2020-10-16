@@ -10,3 +10,4 @@ from .Sensor import SensorsInfo as SensorsInfoResource
 
 from .User import User as UserResource
 from .User import Users as UsersResource
+from .User import UsersInfo as UsersInfoResource

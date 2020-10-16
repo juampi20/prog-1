@@ -1,6 +1,6 @@
 import json
 
-from flask import Blueprint, flash, redirect, render_template, url_for
+from flask import Blueprint, flash, redirect, render_template, url_for, request
 from flask_breadcrumbs import register_breadcrumb
 from flask_login import login_required
 
@@ -16,11 +16,33 @@ user = Blueprint("user", __name__, url_prefix="/user")
 @admin_required
 @register_breadcrumb(user, ".", "Users")
 def index():
-    r = sendRequest(method="get", url="/users", auth=True)
-    users = json.loads(r.text)["Users"]
-    title = "Users List"
-    # Mostrar template
-    return render_template("users.html", title=title, users=users)
+    data = {}
+    # Numero de pagina
+    if "page" in request.args:
+        data["page"] = request.args.get("page", "")
+    else:
+        if "page" in data:
+            del data["page"]
+
+    # Obtener datos de la api
+    r = sendRequest(method="get", url="/users", data=json.dumps(data), auth=True)
+
+    if r.status_code == 200:
+        users = json.loads(r.text)["Users"]
+        pagination = {}
+        pagination["total"] = json.loads(r.text)["total"]
+        pagination["pages"] = json.loads(r.text)["pages"]
+        pagination["current_page"] = json.loads(r.text)["page"]
+        title = "Users List"
+        # Mostrar template
+        return render_template(
+            "users.html",
+            title=title,
+            users=users,
+            pagination=pagination,
+        )
+    else:
+        return redirect(url_for("user.index"))
 
 
 @user.route("/view/<int:id>")
