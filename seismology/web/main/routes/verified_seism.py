@@ -1,7 +1,15 @@
-import json
+import json, io, csv
 from datetime import datetime
 
-from flask import Blueprint, redirect, render_template, request, url_for, flash
+from flask import (
+    Blueprint,
+    redirect,
+    render_template,
+    request,
+    url_for,
+    flash,
+    make_response,
+)
 from flask_breadcrumbs import register_breadcrumb
 
 from ..forms.login_form import LoginForm
@@ -55,6 +63,56 @@ def index():
     if "sort_by" in request.args:
         data["sort_by"] = request.args.get("sort_by", "")
 
+    if "download" in request.args:
+        if request.args.get("download", "") == "Download":
+            code = 200
+            # Comenzar por la primera pagina
+            page = 1
+            list_seisms = []
+            # Recorrer hasta que no haya mas paginas
+            while code == 200:
+                data["page"] = page
+                # Llamada a la api
+                r = sendRequest(
+                    method="get",
+                    url="/verified-seisms",
+                    data=json.dumps(data),
+                )
+                code = r.status_code
+                if code == 200:
+                    # Recorrer los sismos de la pagina y colocar los campos que se quieren agregar
+                    for seism in json.loads(r.text)["Verified-seisms"]:
+                        element = {
+                            "datetime": seism["datetime"],
+                            "depth": seism["depth"],
+                            "magnitude": seism["magnitude"],
+                            "latitude": seism["latitude"],
+                            "longitude": seism["longitude"],
+                            "sensor.name": seism["sensor"]["name"],
+                        }
+                        # Agregar cada elemento a la lista
+                        list_seisms.append(element)
+                # Aumentar en uno el numero de pagina
+                page += 1
+
+            # Inicializar para poder escribir en el buffer de memoria
+            si = io.StringIO()
+            # Inicializar el objeto que va a escribir el csv a partir de un diccionario
+            # Pasar las claves del diccionario como cabecera
+            fc = csv.DictWriter(si, fieldnames=list_seisms[0].keys())
+            # Escribir la cabecera
+            fc.writeheader()
+            # Escribir las filas
+            fc.writerows(list_seisms)
+
+            # Crear una respuesta que tiene como contenido el valor dedl buffer
+            output = make_response(si.getvalue())
+            # Colocar cabeceras para que se descargue como un archivo
+            output.headers["Content-Disposition"] = "attachment; filename=seisms.csv"
+            output.headers["Content-type"] = "text/csv"
+            # Devolver la salida
+            return output
+
     # Numero de pagina
     if "page" in request.args:
         data["page"] = request.args.get("page", "")
@@ -63,7 +121,11 @@ def index():
             del data["page"]
 
     # Obtener datos de la api para la tabla
-    r = sendRequest(method="get", url="/verified-seisms", data=json.dumps(data))
+    r = sendRequest(
+        method="get",
+        url="/verified-seisms",
+        data=json.dumps(data),
+    )
 
     if r.status_code == 200:
         # Cargar sismos verificados

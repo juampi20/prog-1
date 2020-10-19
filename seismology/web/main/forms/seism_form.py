@@ -80,3 +80,6 @@ class SeismFilterForm(FlaskForm):
     submit = SubmitField(
         label="Filter",
     )
+    download = SubmitField(
+        label="Download",
+    )

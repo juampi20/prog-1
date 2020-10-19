@@ -41,9 +41,13 @@
             </div>
             <br>
             <div class="form-row">
-              {{show_submit(filter.submit, class='btn btn-success')}}
+              <div class="col">
+                {{show_submit(filter.submit, class='btn btn-success')}}
+              </div>
+              <div class="col-auto">
+                {{show_submit(filter.download , class='btn btn-success')}}
+              </div>
             </div>
-
           </form>
 
         </div>
