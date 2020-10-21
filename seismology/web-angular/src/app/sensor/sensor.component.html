@@ -1,4 +1,9 @@
+<!-- Lugar donde se insertara el componente de detalle -->
+<!-- Property binding -->
+
 <app-sensor-detail [sensor]="selectedSensor"></app-sensor-detail>
+<br>
+
 <table class="table">
   <thead class="thead-dark">
     <tr>
@@ -6,16 +11,29 @@
       <th scope="col">Name</th>
       <th scope="col">Status</th>
       <th scope="col">Active</th>
+      <th scope="col">User Associated</th>
+      <th scope="col">Actions</th>
     </tr>
   </thead>
   <tbody>
     <!-- Data binding para recorrer lista -->
-    <tr *ngFor="let sensor of sensors" (click)="onSelect(sensor)">
+    <tr *ngFor="let sensor of sensors" [class.selected]="sensor === selectedSensor" (click)="onSelect(sensor)">
       <!-- Interpolación de atributos -->
       <th scope="row">{{sensor.id}}</th>
       <td>{{ sensor.name}}</td>
       <td>{{ sensor.active}}</td>
       <td>{{ sensor.status}}</td>
+      <td>{{ sensor.user.email }}</td>
+      <td>
+        <div class="btn-group" role="group">
+          <a type="button" class="btn btn-primary">View</a>
+          <!-- Event binding para click -->
+          <a type="button" class="btn btn-success" routerLink="edit/{{sensor.id}}">Edit</a>
+
+          <!-- Event binding para click -->
+          <a type="button" class="btn btn-danger">Delete</a>
+        </div>
+      </td>
     </tr>
   </tbody>
 </table>

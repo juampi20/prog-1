@@ -1,6 +1,11 @@
-<ul *ngIf="sensor">
-  <li>{{sensor.id}}</li>
-  <li>{{sensor.name}}</li>
-  <li>{{sensor.active}}</li>
-  <li>{{sensor.status}}</li>
-</ul>
+<!-- Verifica que exista la variable -->
+<div class="card" *ngIf="sensor">
+  <div class="card-body">
+    <h5 class="card-title">{{sensor.name}}</h5>
+  </div>
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item"><b>Active:</b> {{sensor.active}}</li>
+    <li class="list-group-item"><b>Status:</b> {{sensor.status}}</li>
+    <li class="list-group-item"><b>User Associated:</b> {{sensor.user.email}}</li>
+  </ul>
+</div>

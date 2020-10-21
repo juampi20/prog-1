@@ -1,6 +1,10 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+// Importar componente de Sensor
 import { SensorComponent } from "./sensor/sensor.component"
+import { SensorAddComponent } from './sensor/sensor-add/sensor-add.component';
+import { SensorEditComponent } from './sensor/sensor-edit/sensor-edit.component';
+// Importar componente de User
 import { UserComponent } from "./user/user.component"
 
 const routes: Routes = [
@@ -16,7 +20,7 @@ const routes: Routes = [
     path: '',
     data: { breadcrumb: 'Home' },
     children: [
-      //Rutas de Usuario
+      //Rutas de Sensor
       {
         path: 'sensor',
         data: { breadcrumb: 'Sensor' },
@@ -24,9 +28,20 @@ const routes: Routes = [
           {
             path: '',
             component: SensorComponent,
-          }
+          },
+          {
+            path: 'add',
+            component: SensorAddComponent,
+            data: { breadcrumb: 'Add' }
+          },
+          {
+            path: 'edit/:id',
+            component: SensorEditComponent,
+            data: { breadcrumb: 'Edit' },
+          },
         ],
       },
+      //Rutas de User
       {
         path: 'user',
         data: { breadcrumb: 'User' },
@@ -35,7 +50,7 @@ const routes: Routes = [
             path: '',
             component: UserComponent,
           },
-        ]
+        ],
       },
     ],
   },
