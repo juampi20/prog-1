@@ -10,6 +10,7 @@ import { UserComponent } from "./user/user.component"
 import { LoginComponent } from './login/login.component';
 //Importar servicio de proteccion de rutas
 import { AuthGuardService as AuthGuard } from "./auth/auth-guard.service";
+import { AuthAdminGuardService as AuthAdminGuard } from "./auth/auth-admin-guard.service";
 
 const routes: Routes = [
   // Home
@@ -44,19 +45,19 @@ const routes: Routes = [
             path: '',
             component: SensorComponent,
             //Asignar servicio de proteccion
-            canActivate: [AuthGuard],
+            canActivate: [AuthAdminGuard],
           },
           {
             path: 'add',
             component: SensorAddComponent,
             data: { breadcrumb: 'Add' },
-            canActivate: [AuthGuard],
+            canActivate: [AuthAdminGuard],
           },
           {
             path: 'edit/:id',
             component: SensorEditComponent,
             data: { breadcrumb: 'Edit' },
-            canActivate: [AuthGuard],
+            canActivate: [AuthAdminGuard],
           },
         ],
       },
@@ -68,7 +69,7 @@ const routes: Routes = [
           {
             path: '',
             component: UserComponent,
-            canActivate: [AuthGuard],
+            canActivate: [AuthAdminGuard],
           },
         ],
       },

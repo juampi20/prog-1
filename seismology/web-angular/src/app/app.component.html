@@ -3,11 +3,11 @@
   <div class="row">
     <div class="col-md-4">
       <!-- Enlace que carga el componente -->
-      <a class="btn btn-lg btn-block btn-info" routerLink="sensor">Sensor</a>
+      <a class="btn btn-lg btn-block btn-info" routerLink="sensor" *ngIf="authService.isAdmin">Sensor</a>
     </div>
     <div class="col-md-4">
       <!-- Enlace que carga el componente -->
-      <a class="btn btn-lg btn-block btn-info" routerLink="user">User</a>
+      <a class="btn btn-lg btn-block btn-info" routerLink="user" *ngIf="authService.isAdmin">User</a>
     </div>
     <div class="col-md-4">
       <a class="btn btn-lg-btn-block btn-info" (click)='logout()' *ngIf="authService.isAuthenticated">Log Out</a>
