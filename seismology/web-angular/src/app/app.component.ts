@@ -6,10 +6,10 @@ import { AuthService } from './auth/auth.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements AuthService {
+export class AppComponent {
   title = 'web-angular';
 
-  constructor(private authService: AuthService) { }
+  constructor(public authService: AuthService) { }
 
   logout() {
     this.authService.logout()
