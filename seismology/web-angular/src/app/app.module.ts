@@ -13,6 +13,7 @@ import { UserComponent } from './user/user.component';
 import { SensorDetailComponent } from './sensor/sensor-detail/sensor-detail.component';
 import { SensorAddComponent } from './sensor/sensor-add/sensor-add.component';
 import { SensorEditComponent } from './sensor/sensor-edit/sensor-edit.component';
+import { LoginComponent } from './login/login.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { SensorEditComponent } from './sensor/sensor-edit/sensor-edit.component'
     UserComponent,
     SensorDetailComponent,
     SensorAddComponent,
-    SensorEditComponent
+    SensorEditComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
