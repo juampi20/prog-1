@@ -1,11 +1,15 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { Routes, RouterModule, CanActivate } from '@angular/router';
 // Importar componente de Sensor
 import { SensorComponent } from "./sensor/sensor.component"
 import { SensorAddComponent } from './sensor/sensor-add/sensor-add.component';
 import { SensorEditComponent } from './sensor/sensor-edit/sensor-edit.component';
 // Importar componente de User
 import { UserComponent } from "./user/user.component"
+// Importar componente de Login
+import { LoginComponent } from './login/login.component';
+//Importar servicio de proteccion de rutas
+import { AuthGuardService as AuthGuard } from "./auth/auth-guard.service";
 
 const routes: Routes = [
   // Home
@@ -20,6 +24,17 @@ const routes: Routes = [
     path: '',
     data: { breadcrumb: 'Home' },
     children: [
+      //Rutas de Login
+      {
+        path: 'login',
+        data: { breadcrumb: 'Login' },
+        children: [
+          {
+            path: '',
+            component: LoginComponent,
+          },
+        ],
+      },
       //Rutas de Sensor
       {
         path: 'sensor',
@@ -28,16 +43,20 @@ const routes: Routes = [
           {
             path: '',
             component: SensorComponent,
+            //Asignar servicio de proteccion
+            canActivate: [AuthGuard],
           },
           {
             path: 'add',
             component: SensorAddComponent,
-            data: { breadcrumb: 'Add' }
+            data: { breadcrumb: 'Add' },
+            canActivate: [AuthGuard],
           },
           {
             path: 'edit/:id',
             component: SensorEditComponent,
             data: { breadcrumb: 'Edit' },
+            canActivate: [AuthGuard],
           },
         ],
       },
@@ -49,6 +68,7 @@ const routes: Routes = [
           {
             path: '',
             component: UserComponent,
+            canActivate: [AuthGuard],
           },
         ],
       },
