@@ -66,11 +66,16 @@
             {% endif %}
           </ul>
           {% if current_user.is_authenticated %}
-          <ul class="nav navbar-nav ml-auto">
-            <li class="nav-item" role="presentation">
-              <span class="font-weight-bold m-auto">{{ current_user.email }}</span>
-              <a class="btn btn-secondary" href="{{ url_for('main.logout') }}">Log out</a>
+          <ul class="navbar-nav ml-auto nav-flex-icons">
+            <li class="nav-item dropdown" role="presentation">
+              <a class="nav-link dropdown-toggle" id="profile" data-toggle="dropdown">
+                {{ current_user.email }}
+              </a>
+              <div class="dropdown-menu dropdown-menu-right dropdown-default" aria-labelledby="profile">
+                <a class="dropdown-item" href="{{ url_for('main.logout') }}">Log out</a>
+              </div>
             </li>
+
           </ul>
           {% else %}
 
