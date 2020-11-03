@@ -13,13 +13,17 @@
 
     <!-- Sidebar -->
     <div class="col-md-2">
-      <nav class="collapse" id="filter">
+      <nav class="collapse show" id="filter">
         <div class="container">
 
           <h3 class="text-uppercase text-center text-white">Filters</h3>
           <hr class="bg-white" />
 
           <form method="GET" action="{{url_for('unverified_seism.index')}}">
+            <div class="form-row">
+              {{show_submit(filter.submit, class='btn btn-success')}}
+            </div>
+            <br>
             <div class="form-row">
               {{show_field(filter.sensorId, class='form-control')}}
             </div>
@@ -37,10 +41,6 @@
             <div class="form-row">
               {{show_field(filter.magnitude_min, class='form-control')}}
               {{show_field(filter.magnitude_max, class='form-control')}}
-            </div>
-            <br>
-            <div class="form-row">
-              {{show_submit(filter.submit, class='btn btn-success')}}
             </div>
           </form>
 
