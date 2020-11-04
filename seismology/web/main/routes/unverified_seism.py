@@ -78,7 +78,7 @@ def index():
         pagination["current_page"] = json.loads(r.text)["page"]
         title = "Unverified Seisms List"
         return render_template(
-            "unverified-seisms.html",
+            "unverified_seisms.html",
             title=title,
             unverified_seisms=unverified_seisms,
             filter=filter,
@@ -100,7 +100,7 @@ def view(id):
     unverified_seism = json.loads(r.text)
     title = "Unverified Seism View"
     return render_template(
-        "unverified-seism.html", title=title, unverified_seism=unverified_seism
+        "unverified_seism_view.html", title=title, unverified_seism=unverified_seism
     )
 
 
@@ -131,7 +131,7 @@ def edit(id):
         )
         flash("Unverified Seism edited", "success")
         return redirect(url_for("unverified_seism.index"))
-    return render_template("unverfied-seismEdit_form.html", form=form, id=id)
+    return render_template("unverified_seism_edit.html", form=form, id=id)
 
 
 @unverified_seism.route("/delete/<int:id>")

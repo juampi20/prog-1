@@ -56,7 +56,7 @@ def view(id):
         return redirect(url_for("user.index"))
     user = json.loads(r.text)
     title = "User View"
-    return render_template("user.html", title=title, user=user)
+    return render_template("user_view.html", title=title, user=user)
 
 
 @user.route("/create", methods=["GET", "POST"])
@@ -77,7 +77,7 @@ def create():
         r = sendRequest(method="post", url="/users", data=data, auth=True)
         return redirect(url_for("user.index"))  # Redirecciona a la lista
     # Muestra el formulario
-    return render_template("userCreate_form.html", form=form)
+    return render_template("user_create.html", form=form)
 
 
 @user.route("/edit/<int:id>", methods=["GET", "POST"])
@@ -101,7 +101,7 @@ def edit(id):
         r = sendRequest(method="put", url="/user/" + str(id), data=data, auth=True)
         flash("User edited", "success")
         return redirect(url_for("user.index"))
-    return render_template("userEdit_form.html", form=form, id=id)
+    return render_template("user_edit.html", form=form, id=id)
 
 
 @user.route("/delete/<int:id>")

@@ -137,7 +137,7 @@ def index():
         pagination["current_page"] = json.loads(r.text)["page"]
         title = "Verified Seisms List"
         return render_template(
-            "verified-seisms.html",
+            "verified_seisms.html",
             title=title,
             verified_seisms=verified_seisms,
             loginForm=loginForm,
@@ -159,7 +159,7 @@ def view(id):
     title = "Verified Seism View"
     loginForm = LoginForm()
     return render_template(
-        "verified-seism.html",
+        "verified_seism_view.html",
         title=title,
         verified_seism=verified_seism,
         loginForm=loginForm,

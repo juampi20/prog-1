@@ -84,7 +84,7 @@ def view(id):
         return redirect(url_for("sensor.index"))
     sensor = json.loads(r.text)
     title = "Sensor View"
-    return render_template("sensor.html", title=title, sensor=sensor)
+    return render_template("sensor_view.html", title=title, sensor=sensor)
 
 
 @sensor.route("/create", methods=["GET", "POST"])
@@ -107,7 +107,7 @@ def create():
         data = json.dumps(sensor)
         r = sendRequest(method="post", url="/sensors", data=data, auth=True)
         return redirect(url_for("sensor.index"))  # Redirecciona a la lista
-    return render_template("sensorEdit_form.html", form=form)
+    return render_template("sensor_edit.html", form=form)
 
 
 @sensor.route("/edit/<int:id>", methods=["GET", "POST"])
@@ -156,7 +156,7 @@ def edit(id):
         flash("Sensor edited", "success")
         return redirect(url_for("sensor.index"))
 
-    return render_template("sensorEdit_form.html", id=id, form=form)
+    return render_template("sensor_edit.html", id=id, form=form)
 
 
 @sensor.route("/delete/<int:id>")
