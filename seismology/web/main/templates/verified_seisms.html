@@ -189,12 +189,12 @@
       </div>
 
       <!-- Pagination -->
-      <nav aria-label="Page navigation example">
+      <nav aria-label="Pagination">
         <ul class="pagination justify-content-center">
           {% if pagination.current_page != 1 %}
           <li class="page-item">
             <a class="page-link" href="{{ url_for('verified_seism.index',
-            page = (pagination.current_page-1),
+            page = 1,
             datetime = request.args.datetime,
             from_datetime = request.args.from_datetime,
             to_datetime = request.args.to_datetime,
@@ -213,7 +213,30 @@
             </a>
           </li>
           {% endif %}
-          {% for n in range(1, pagination.pages+1) %}
+          {% if pagination.current_page != 1 %}
+          <li class="page-item">
+            <a class="page-link" href="{{ url_for('verified_seism.index',
+            page = (pagination.current_page-1),
+            datetime = request.args.datetime,
+            from_datetime = request.args.from_datetime,
+            to_datetime = request.args.to_datetime,
+            depth_min = request.args.depth_min,
+            depth_max = request.args.depth_max,
+            magnitude_max = request.args.magnitude_max,
+            magnitude_min = request.args.magnitude_min,
+            sensorId = request.args.sensorId )}}" aria-label="Previous">
+              <span aria-hidden="true">&lsaquo;</span>
+            </a>
+          </li>
+          {% else %}
+          <li class="page-item disabled">
+            <a href="#" class="page-link" tabindex="-1" aria-disabled="true" aria-label="Previous">
+              <span aria-hidden="true">&lsaquo;</span>
+            </a>
+          </li>
+          {% endif %}
+          {% for n in range(pagination.current_page-5, pagination.current_page+5) %}
+          {% if n >= 1 and n <= pagination.pages %}
           {% if n != pagination.current_page %}
           <li class="page-item">
             <a class="page-link" href="{{ url_for('verified_seism.index',
@@ -232,11 +255,33 @@
             <a class="page-link" href="#" tabindex="+1" aria-disabled="true">{{n}}</a>
           </li>
           {% endif %}
+          {% endif %}
           {% endfor %}
           {% if pagination.current_page != pagination.pages %}
           <li class="page-item">
             <a class="page-link" href="{{ url_for('verified_seism.index',
             page = (pagination.current_page+1),
+            datetime = request.args.datetime,
+            from_datetime = request.args.from_datetime,
+            to_datetime = request.args.to_datetime,
+            depth_min = request.args.depth_min,
+            depth_max = request.args.depth_max,
+            magnitude_max = request.args.magnitude_max,
+            magnitude_min = request.args.magnitude_min,
+            sensorId = request.args.sensorId )}}" aria-label="Next">
+              <span aria-hidden="true">&rsaquo;</span>
+            </a>
+          </li>
+          {% else %}
+          <li class="page-item disabled">
+            <a href="#" class="page-link" tabindex="-1" aria-disabled="true" aria-label="Next">
+              <span aria-hidden="true">&rsaquo;</span></a>
+          </li>
+          {% endif %}
+          {% if pagination.current_page != pagination.pages %}
+          <li class="page-item">
+            <a class="page-link" href="{{ url_for('verified_seism.index',
+            page = pagination.pages,
             datetime = request.args.datetime,
             from_datetime = request.args.from_datetime,
             to_datetime = request.args.to_datetime,

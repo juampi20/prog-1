@@ -141,7 +141,7 @@
           {% if pagination.current_page != 1 %}
           <li class="page-item">
             <a class="page-link" href="{{ url_for('sensor.index',
-            page = (pagination.current_page-1),
+            page = 1,
             name = request.args.name,
             status = request.args.status,
             active = request.args.active,
@@ -156,7 +156,26 @@
             </a>
           </li>
           {% endif %}
-          {% for n in range(1, pagination.pages+1) %}
+          {% if pagination.current_page != 1 %}
+          <li class="page-item">
+            <a class="page-link" href="{{ url_for('sensor.index',
+            page = (pagination.current_page-1),
+            name = request.args.name,
+            status = request.args.status,
+            active = request.args.active,
+            userId = request.args.userId )}}" aria-label="Previous">
+              <span aria-hidden="true">&lsaquo;</span>
+            </a>
+          </li>
+          {% else %}
+          <li class="page-item disabled">
+            <a href="#" class="page-link" tabindex="-1" aria-disabled="true" aria-label="Previous">
+              <span aria-hidden="true">&lsaquo;</span>
+            </a>
+          </li>
+          {% endif %}
+          {% for n in range(pagination.current_page-5, pagination.current_page+5) %}
+          {% if n >= 1 and n <= pagination.pages %}
           {% if n != pagination.current_page %}
           <li class="page-item">
             <a class="page-link" href="{{ url_for('sensor.index',
@@ -171,11 +190,29 @@
             <a class="page-link" href="#" tabindex="+1" aria-disabled="true">{{n}}</a>
           </li>
           {% endif %}
+          {% endif %}
           {% endfor %}
           {% if pagination.current_page != pagination.pages %}
           <li class="page-item">
             <a class="page-link" href="{{ url_for('sensor.index',
             page = (pagination.current_page+1),
+            name = request.args.name,
+            status = request.args.status,
+            active = request.args.active,
+            userId = request.args.userId )}}" aria-label="Next">
+              <span aria-hidden="true">&rsaquo;</span>
+            </a>
+          </li>
+          {% else %}
+          <li class="page-item disabled">
+            <a href="#" class="page-link" tabindex="-1" aria-disabled="true" aria-label="Next">
+              <span aria-hidden="true">&rsaquo;</span></a>
+          </li>
+          {% endif %}
+          {% if pagination.current_page != pagination.pages %}
+          <li class="page-item">
+            <a class="page-link" href="{{ url_for('sensor.index',
+            page = pagination.pages,
             name = request.args.name,
             status = request.args.status,
             active = request.args.active,
