@@ -1,13 +1,13 @@
 from flask_wtf import FlaskForm
-from wtforms import validators  # Importa validaciones
-from wtforms.fields.html5 import DateTimeLocalField as DateTimeField
 from wtforms import (
     BooleanField,
     FloatField,
     IntegerField,
     SelectField,
     SubmitField,
+    validators,
 )
+from wtforms.fields.html5 import DateTimeLocalField as DateTimeField
 
 
 class UnverifiedSeismEditForm(FlaskForm):
@@ -39,13 +39,13 @@ class UnverifiedSeismEditForm(FlaskForm):
 
 
 class SeismFilterForm(FlaskForm):
-    datetimeFrom = DateTimeField(
+    from_datetime = DateTimeField(
         label="From Datetime",
         format="%Y-%m-%dT%H:%M",
         validators=[validators.optional()],
     )
 
-    datetimeTo = DateTimeField(
+    to_datetime = DateTimeField(
         label="To Datetime",
         format="%Y-%m-%dT%H:%M",
         validators=[validators.optional()],

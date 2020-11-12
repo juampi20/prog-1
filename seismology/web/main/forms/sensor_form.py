@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import BooleanField, IntegerField, SelectField, StringField, SubmitField
 from wtforms import validators  # Importa validaciones
+from wtforms import BooleanField, IntegerField, SelectField, StringField, SubmitField
 
 # from flask_restplus import inputs
 

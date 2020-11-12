@@ -59,10 +59,6 @@ class Sensors(Resource):
                 # Filtro pot userId
                 if key == "name":
                     sensors = sensors.filter(SensorModel.name.like("%" + value + "%"))
-                if key == "userId[lte]":
-                    sensors = sensors.filter(SensorModel.userId <= value)
-                if key == "userId[gte]":
-                    sensors = sensors.filter(SensorModel.userId >= value)
                 if key == "userId":
                     sensors = sensors.filter(SensorModel.userId == value)
                 # Filtro por active

@@ -29,13 +29,13 @@ def index():
     # Validar formulario de filtro
     if filter.validate():
         # Datetime
-        if filter.datetimeFrom.data and filter.datetimeTo.data:
-            if filter.datetimeFrom.data == filter.datetimeTo.data:
-                data["datetime"] = filter.datetimeTo.data.strftime("%Y-%m-%d %H:%M")
-        if filter.datetimeFrom.data != None:
-            data["datetimeFrom"] = filter.datetimeFrom.data.strftime("%Y-%m-%d %H:%M")
-        if filter.datetimeTo.data != None:
-            data["datetimeTo"] = filter.datetimeTo.data.strftime("%Y-%m-%d %H:%M")
+        if filter.from_datetime.data and filter.to_datetime.data:
+            if filter.from_datetime.data == filter.to_datetime.data:
+                data["datetime"] = filter.to_datetime.data.strftime("%Y-%m-%d %H:%M")
+        if filter.from_datetime.data != None:
+            data["from_datetime"] = filter.from_datetime.data.strftime("%Y-%m-%d %H:%M")
+        if filter.to_datetime.data != None:
+            data["to_datetime"] = filter.to_datetime.data.strftime("%Y-%m-%d %H:%M")
 
         # SensorId
         if filter.sensorId.data != None and filter.sensorId.data != 0:

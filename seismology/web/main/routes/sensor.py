@@ -1,6 +1,6 @@
 import json
 
-from flask import Blueprint, flash, redirect, render_template, url_for, request, flash
+from flask import Blueprint, flash, redirect, render_template, request, url_for
 from flask_breadcrumbs import register_breadcrumb
 from flask_login import login_required
 

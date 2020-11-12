@@ -1,12 +1,14 @@
-from datetime import datetime
-from flask import request, jsonify
-from flask_restful import Resource
-from flask_jwt_extended import jwt_required, get_jwt_claims, get_jwt_identity
-from main.models import SeismModel, SensorModel
-from main.auth.decorators import admin_required
-from random import uniform, random, randint
-from .. import db
 import time
+from datetime import datetime
+from random import randint, uniform
+
+from flask import jsonify, request
+from flask_jwt_extended import get_jwt_claims, get_jwt_identity, jwt_required
+from flask_restful import Resource
+from main.auth.decorators import admin_required
+from main.models import SeismModel, SensorModel
+
+from .. import db
 
 
 # Resource Verified Seism
@@ -35,9 +37,9 @@ class VerifiedSeisms(Resource):
                 # Filtros para datetime
                 if "datetime" in filters:
                     seisms = seisms.filter(SeismModel.datetime == value)
-                if key == "datetimeFrom":
+                if key == "from_datetime":
                     seisms = seisms.filter(SeismModel.datetime >= value)
-                if key == "datetimeTo":
+                if key == "to_datetime":
                     seisms = seisms.filter(SeismModel.datetime <= value)
 
                 # Filtros para sensor.name
@@ -152,10 +154,10 @@ class UnverifiedSeisms(Resource):
                 # Filtros para datetime
                 if "datetime" in filters:
                     seisms = seisms.filter(SeismModel.datetime == value)
-                if key == "datetimeFrom":
+                if key == "from_datetime":
                     seisms = seisms.filter(SeismModel.datetime >= value)
 
-                if key == "datetimeTo":
+                if key == "to_datetime":
                     seisms = seisms.filter(SeismModel.datetime <= value)
 
                 # Filtros para sensor.name
