@@ -1,5 +1,6 @@
 import socket
 import time
+import json
 
 from main import db
 from main.models import SeismModel, SensorModel
@@ -43,8 +44,9 @@ def call_sensors(app):  # Llamar a sensores
                 s.sendto(b" ", (sensor.ip, sensor.port))
                 try:
                     d = s.recvfrom(1024)[0]
-                    seism = SeismModel.from_json(d)
+                    seism = SeismModel.from_json_sensor_socket(json.loads(d))
                     seism.sensorId = sensor.id
+                    seism.verified = False
                     db.session.add(seism)
                     db.session.commit()
                 except socket.timeout:
